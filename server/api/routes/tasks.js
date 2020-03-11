@@ -11,19 +11,23 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+// Require task model
 const Task = require('../models/tasks');
 
 /**
   * Handles task GET request
   */
 router.get('/', (req, res, next) => {
+  // Get all tasks and log results/errors
   Task.find()
     .exec()
     .then( docs => {
+      // Log and respond to success
       console.log(docs);
       res.status(200).json(docs);
     })
-    .catch(err => {
+    .catch( err => {
+      // Log and respond to any errors
       console.log(err);
       res.status(500).json({ error: err });
     });
@@ -33,9 +37,6 @@ router.get('/', (req, res, next) => {
   * Handles task POST request
   */
 router.post('/', (req, res, next) => {
-  /* ToDo: use the employee schema for
-    createdBy, assignmentHistory entries */
-
   // Create a new task with the Task schema
   const task = new Task({
     _id: new mongoose.Types.ObjectId(),
@@ -54,17 +55,15 @@ router.post('/', (req, res, next) => {
   // Save the new task and log results/error
   task
     .save()
-    .then( result => {
-      // log the results
-      console.log(result);
-
-      // Send status code and message
+    .then( results => {
+      // Log and respond to success
+      console.log(results);
       res.status(201).json({
-        message: 'Handling POST requests to tasks.',
         createTask: task
       });
     })
     .catch( err => {
+      // Log and respond to any errors
       console.log(err);
       res.status(500).json({ error: err });
     });
@@ -76,10 +75,13 @@ router.post('/', (req, res, next) => {
 router.get('/:taskId', (req, res, next) => {
   const taskId = req.params.taskId;
 
+  // Get one task by _id and log results/errors
   Task.findById(taskId)
     .exec()
     .then(doc => {
+      // Log and respond to success
       console.log('From database', doc);
+      // Send appropriate response for number of results
       if (doc) {
         res.status(200).json(doc);
       } else {
@@ -89,9 +91,10 @@ router.get('/:taskId', (req, res, next) => {
       }
 
     })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({error: error});
+    .catch(err => {
+      // Log and respond to any errors
+      console.log(err);
+      res.status(500).json({error: err});
     });
 });
 
@@ -121,19 +124,21 @@ router.patch('/:taskId', (req, res, next) => {
   Task.update({ _id: taskId }, { $set: updateValues })
     .exec()
     .then( result => {
+      // Log and respond to success
       console.log(result);
       res.status(200).json(result);
     })
     .catch( err => {
+      // Log and respond to any errors
       console.log(err);
       res.status(500).json({
         error: err
-      })
+      });
     });
 });
 
 /**
-  * Handles task/taskId DELETE request (find-by-id)
+  * Handles task/taskId DELETE request
   */
 router.delete('/:taskId', (req, res, next) => {
   const taskId = req.params.taskId;
@@ -141,14 +146,17 @@ router.delete('/:taskId', (req, res, next) => {
   // Delete document with given task ID
   Task.remove({ _id: taskId })
     .exec()
-    .then( result => {
-      res.status(200).json( result );
+    .then( results => {
+      // Log and respond to success
+      console.log(results);
+      res.status(200).json(results);
     })
     .catch( err => {
+      // Log and respond to any errors
       console.log(err);
       res.status(500).json({
         error: err
-      })
+      });
     });
 });
 
