@@ -58,6 +58,7 @@ mongoose.connect(dbURI, {
  * API(s)
  */
 const taskRoutes = require('./api/routes/tasks');
+const employeeRoutes = require('./api/routes/employees');
 
 // Set header parameters (C.O.R.S. error handling)
 app.use((req, res, next) => {
@@ -74,6 +75,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/tasks', taskRoutes);
+app.use('/api/employees', employeeRoutes);
 
 // Set an error if no path is found
 app.use((req, res, next) => {

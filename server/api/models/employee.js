@@ -16,11 +16,26 @@ const mongoose = require('mongoose');
  */
 const employeeSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  empId: { type: Number, required: true, unique: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  position: { type: String, required: true, default: 'authUser' },
-  email: { type: String, required: true }
+  empId: {
+    type: Number,
+    required: true, unique: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  position: {
+    type: String,
+    required: [true, 'authUser']
+  },
+  email: {
+    type: String,
+    required: true
+  }
 });
 
 module.exports = mongoose.model('employee', employeeSchema);
