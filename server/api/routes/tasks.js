@@ -11,8 +11,12 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-// Require task model
+// Require models
 const Task = require('../models/tasks');
+const Employee = require('../models/employee');
+
+// Variables
+const taskRoute = '/api/tasks/';
 
 /**
   * Handles task GET request
@@ -41,7 +45,7 @@ router.get('/', (req, res, next) => {
             assignmentHistory: doc.assignmentHistory,
             request: {
               type: "GET",
-              url: req.get('host') + '/api/tasks/' + doc._id
+              url: req.get('host') + taskRoute + doc._id
             }
           };
         })
@@ -74,10 +78,9 @@ router.post('/', (req, res, next) => {
     assignmentHistory: req.body.assignmentHistory
   });
 
-  // Save the new task and log results/error
   task
     .save()
-    .then( results => {
+    .then(results => {
       // Respond to success
       res.status(201).json({
         createdTask: {
@@ -94,15 +97,16 @@ router.post('/', (req, res, next) => {
           assignmentHistory: results.assignmentHistory,
           request: {
             type: "GET",
-            url: req.get('host') + '/api/tasks/' + results._id
+            url: req.get('host') + taskRoute + results._id
           }
         }
       });
     })
     .catch( err => {
       // Log and respond to any errors
-      console.log(err);
-      res.status(500).json({ error: err });
+      res.status(500).json({
+        error: err
+      });
     });
 });
 
@@ -124,7 +128,7 @@ router.get('/:taskId', (req, res, next) => {
           request: {
             type: "GET",
             description: 'Get all tasks',
-            url: req.get('host') + '/api/tasks/'
+            url: req.get('host') + taskRoute
           }
         });
       } else {
@@ -172,7 +176,7 @@ router.patch('/:taskId', (req, res, next) => {
         message: 'Task updates',
         request: {
           type: "GET",
-          url: req.get('host') + '/api/tasks/' + taskId
+          url: req.get('host') + taskRoute + taskId
         }
       });
     })
@@ -200,7 +204,7 @@ router.delete('/:taskId', (req, res, next) => {
         message: 'Task was deleted',
         request: {
           type: 'POST',
-          url: req.get('host') + '/api/tasks/',
+          url: req.get('host') + taskRoute,
           body: {
             title: 'String',
             content: 'String',

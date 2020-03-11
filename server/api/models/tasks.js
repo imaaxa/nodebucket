@@ -26,31 +26,30 @@ const taskSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    required: [true, 'todo']
+    default: 'todo'
   },
   level: {
     type: String,
-    required: [true, 'normal']
+    default: 'normal'
   },
   created: {
     type: Date,
-    required: [true, Date.now]
+    default: Date.now
   },
   updated: {
     type: Date,
-    required: [true, Date.now]
+    default: Date.now
   },
   completed: {
-    type: Date,
-    required: [true, Date.now]
+    type: Date
   },
   weight: {
     type: Number,
-    required: [true, 0],
+    default: "0",
     min: 0
   },
   createdBy: {
-    Object
+    type: String
   },
   assignmentHistory: {
     type: [Object]

@@ -30,7 +30,7 @@ const employeeSchema = mongoose.Schema({
   },
   position: {
     type: String,
-    required: [true, 'authUser']
+    default: 'authUser'
   },
   email: {
     type: String,

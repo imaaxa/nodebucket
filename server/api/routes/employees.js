@@ -14,6 +14,9 @@ const mongoose = require('mongoose');
 // Require employee model
 const Employee = require('../models/employee');
 
+// Variables
+const employeeRoute = '/api/employees/';
+
 /**
  * Handles employee GET request
  */
@@ -36,7 +39,7 @@ router.get('/', (req, res, next) => {
             email: doc.email,
             request: {
               type: "GET",
-              url: req.get('host') + '/api/employees/' + doc._id
+              url: req.get('host') + employeeRoute + doc._id
             }
           };
         })
@@ -79,14 +82,13 @@ router.post('/', (req, res, next) => {
           email: results.email,
           request: {
             type: "GET",
-            url: req.get('host') + '/api/employee/' + results._id
+            url: req.get('host') + employeeRoute + results._id
           }
         }
       });
     })
     .catch( err => {
       // Log and respond to any errors
-      console.log(err);
       res.status(500).json({ error: err});
     });
 });
@@ -109,7 +111,7 @@ router.get('/:employeeId', (req, res, next) => {
           request: {
             type: "GET",
             description: 'Get all employees',
-            url: req.get('host') + '/api/employees/'
+            url: req.get('host') + employeeRoute
           }
         });
       } else {
@@ -156,7 +158,7 @@ router.patch('/:employeeId', (req, res, next) => {
         message: 'Employee updated',
         request: {
           type: "GET",
-          url: req.get('host') + '/api/employees/' + employeeId
+          url: req.get('host') + employeeRoute + employeeId
         }
       });
     })
@@ -184,7 +186,7 @@ router.delete('/:employeeId', (req, res, next) => {
         message: 'Employee was deleted',
         request: {
           type: 'POST',
-          url: req.get('host') + '/api/employees/',
+          url: req.get('host') + employeeRoute,
           body: {
             empId: 'Number',
             firstName: 'String',
