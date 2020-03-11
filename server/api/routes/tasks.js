@@ -166,10 +166,10 @@ router.patch('/:taskId', (req, res, next) => {
   // Update document with given task ID
   Task.update({ _id: taskId }, { $set: updateValues })
     .exec()
-    .then( result => {
+    .then( results => {
       // Respond to success
       res.status(200).json({
-        message: 'Task update',
+        message: 'Task updates',
         request: {
           type: "GET",
           url: req.get('host') + '/api/tasks/' + taskId
@@ -197,7 +197,7 @@ router.delete('/:taskId', (req, res, next) => {
     .then( results => {
       // Respond to success
       res.status(200).json({
-        message: "Task was deleted",
+        message: 'Task was deleted',
         request: {
           type: 'POST',
           url: req.get('host') + '/api/tasks/',
