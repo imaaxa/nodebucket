@@ -20,11 +20,33 @@ const Task = require('../models/tasks');
 router.get('/', (req, res, next) => {
   // Get all tasks and log results/errors
   Task.find()
+    .select("_id title content status level weight created updated completed createdBy assignmentHistory")
     .exec()
     .then( docs => {
-      // Log and respond to success
-      console.log(docs);
-      res.status(200).json(docs);
+      // Respond to success
+      const response = {
+        count: docs.length,
+        tasks: docs.map(doc => {
+          return {
+            _id: doc._id,
+            title: doc.title,
+            content: doc.content,
+            status: doc.status,
+            level: doc.level,
+            weight: 0,
+            created: doc.created,
+            updated: doc.updated,
+            completed: doc.completed,
+            createdBy: doc.createdBy,
+            assignmentHistory: doc.assignmentHistory,
+            request: {
+              type: "GET",
+              url: req.get('host') + '/api/tasks/' + doc._id
+            }
+          };
+        })
+      };
+      res.status(200).json(response);
     })
     .catch( err => {
       // Log and respond to any errors
@@ -56,10 +78,25 @@ router.post('/', (req, res, next) => {
   task
     .save()
     .then( results => {
-      // Log and respond to success
-      console.log(results);
+      // Respond to success
       res.status(201).json({
-        createTask: task
+        createdTask: {
+          _id: results._id,
+          title: results.title,
+          content: results.content,
+          status: results.status,
+          level: results.level,
+          created: results.created,
+          updated: results.updated,
+          completed: results.completed,
+          weight: results.weight,
+          createdBy: results.createdBy,
+          assignmentHistory: results.assignmentHistory,
+          request: {
+            type: "GET",
+            url: req.get('host') + '/api/tasks/' + results._id
+          }
+        }
       });
     })
     .catch( err => {
@@ -77,13 +114,19 @@ router.get('/:taskId', (req, res, next) => {
 
   // Get one task by _id and log results/errors
   Task.findById(taskId)
+    .select("_id title content status level weight created updated completed createdBy assignmentHistory")
     .exec()
     .then(doc => {
-      // Log and respond to success
-      console.log('From database', doc);
-      // Send appropriate response for number of results
+      // Respond to success and send appropriate response for number of results
       if (doc) {
-        res.status(200).json(doc);
+        res.status(200).json({
+          product: doc,
+          request: {
+            type: "GET",
+            description: 'Get all tasks',
+            url: req.get('host') + '/api/tasks/'
+          }
+        });
       } else {
         res.status(404).json({
           message: 'No valid entry found using provided ID'
@@ -124,9 +167,14 @@ router.patch('/:taskId', (req, res, next) => {
   Task.update({ _id: taskId }, { $set: updateValues })
     .exec()
     .then( result => {
-      // Log and respond to success
-      console.log(result);
-      res.status(200).json(result);
+      // Respond to success
+      res.status(200).json({
+        message: 'Task update',
+        request: {
+          type: "GET",
+          url: req.get('host') + '/api/tasks/' + taskId
+        }
+      });
     })
     .catch( err => {
       // Log and respond to any errors
@@ -147,9 +195,26 @@ router.delete('/:taskId', (req, res, next) => {
   Task.remove({ _id: taskId })
     .exec()
     .then( results => {
-      // Log and respond to success
-      console.log(results);
-      res.status(200).json(results);
+      // Respond to success
+      res.status(200).json({
+        message: "Task was deleted",
+        request: {
+          type: 'POST',
+          url: req.get('host') + '/api/tasks/',
+          body: {
+            title: 'String',
+            content: 'String',
+            status: 'String',
+            level: 'String',
+            weight: 'Number',
+            created: 'Date',
+            updated: 'Date',
+            completed: 'Date',
+            createdBy: 'Object',
+            assignmentHistory: '[Object]'
+          }
+        }
+      });
     })
     .catch( err => {
       // Log and respond to any errors
