@@ -20,11 +20,28 @@ const Employee = require('../models/employee');
 router.get('/', (req, res, next) => {
   // Get all employees and log results/errors
   Employee.find()
+    .select("_id empId firstName lastName position email")
     .exec()
     .then( docs => {
-      // Log and respond to success
-      console.log(docs);
-      res.status(200).json(docs);
+      // Respond to success
+      const response = {
+        count: docs.length,
+        employees: docs.map(doc => {
+          return {
+            _id: doc._id,
+            empId: doc.empId,
+            firstName: doc.firstName,
+            lastName: doc.lastName,
+            position: doc.position,
+            email: doc.email,
+            request: {
+              type: "GET",
+              url: req.get('host') + '/api/employees/' + doc._id
+            }
+          };
+        })
+      };
+      res.status(200).json(response);
     })
     .catch( err => {
       // Log and respond to any errors
@@ -51,10 +68,20 @@ router.post('/', (req, res, next) => {
   employee
     .save()
     .then( results => {
-      // Log and respond to success
-      console.log(results);
+      // Respond to success
       res.status(200).json({
-        createEmployee: employee
+        createdEmployee: {
+          _id: results._id,
+          empId: results.empId,
+          firstName: results.firstName,
+          lastName: results.lastName,
+          position: results.position,
+          email: results.email,
+          request: {
+            type: "GET",
+            url: req.get('host') + '/api/employee/' + results._id
+          }
+        }
       });
     })
     .catch( err => {
@@ -72,13 +99,19 @@ router.get('/:employeeId', (req, res, next) => {
 
   // Get one employee by _id and log results/errors
   Employee.findById(employeeId)
+    .select("_id empId firstName lastName position email")
     .exec()
     .then(doc => {
-      // Log and respond to success
-      console.log('From database', doc);
-      // Send appropriate response for number of results
+      // Respond to success and send appropriate response for number of results
       if (doc) {
-        res.status(200).json(doc);
+        res.status(200).json({
+          product: doc,
+          request: {
+            type: "GET",
+            description: 'Get all employees',
+            url: req.get('host') + '/api/employees/'
+          }
+        });
       } else {
         res.status(404).json({
           message: 'No valid entry found using provided ID'
@@ -118,9 +151,14 @@ router.patch('/:employeeId', (req, res, next) => {
   Employee.update({ _id: employeeId }, { $set: updateValues })
     .exec()
     .then(results => {
-      // Log and respond to success
-      console.log(results);
-      res.status(200).json(results);
+      // Respond to success
+      res.status(200).json({
+        message: 'Employee updated',
+        request: {
+          type: "GET",
+          url: req.get('host') + '/api/employees/' + employeeId
+        }
+      });
     })
     .catch(err => {
       // Log and respond to any errors
@@ -140,10 +178,22 @@ router.delete('/:employeeId', (req, res, next) => {
   // Delete document with given employee ID
   Employee.remove({ _id: taskId })
     .exec()
-    .then( results => {
-      // Log and respond to success
-      console.log(results);
-      res.status(200).json(results);
+    .then(results => {
+      // Respond to success
+      res.status(200).json({
+        message: 'Employee was deleted',
+        request: {
+          type: 'POST',
+          url: req.get('host') + '/api/employees/',
+          body: {
+            empId: 'Number',
+            firstName: 'String',
+            lastName: 'String',
+            position: 'String',
+            email: 'String'
+          }
+        }
+      });
     })
     .catch( err => {
       // Log and respond to any errors
