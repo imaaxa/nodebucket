@@ -26,8 +26,11 @@ let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': true}));
 app.use(morgan('dev'));
-//app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
-//app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
+
+if (!options.storageConfig.serv.DEV) {
+  app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
+  app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
+}
 
 /**
  * Variables
@@ -57,7 +60,6 @@ mongoose.connect(dbURI, {
 /**
  * API(s)
  */
-const taskRoutes = require('./api/routes/tasks');
 const employeeRoutes = require('./api/routes/employees');
 
 // Set header parameters (C.O.R.S. error handling)
@@ -74,7 +76,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/tasks', taskRoutes);
 app.use('/api/employees', employeeRoutes);
 
 // Set an error if no path is found
