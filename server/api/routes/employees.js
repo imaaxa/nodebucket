@@ -17,13 +17,17 @@ const Employee = require('../models/employee');
 // Variables
 const employeeRoute = '/api/employees/';
 
+/********************
+ Employee handling area
+ ********************/
+
 /**
- * Handles employee GET request
+ * Handles GET request: employees
  */
 router.get('/', (req, res, next) => {
   // Get all employees and log results/errors
   Employee.find()
-    .select("_id empId firstName lastName position email")
+    .select("empId firstName lastName todo done")
     .exec()
     .then( docs => {
       // Respond to success
@@ -39,7 +43,7 @@ router.get('/', (req, res, next) => {
             email: doc.email,
             request: {
               type: "GET",
-              url: req.get('host') + employeeRoute + doc._id
+              url: req.get('host') + employeeRoute + doc.empId
             }
           };
         })
@@ -54,7 +58,7 @@ router.get('/', (req, res, next) => {
 });
 
 /**
- * Handles employee POST request
+ * Handles POST request: employees
  */
 router.post('/', (req, res, next) => {
   // Create a new task with the Employee schema
@@ -94,20 +98,20 @@ router.post('/', (req, res, next) => {
 });
 
 /**
- * Handles employee/employeeId GET request (find-by-id)
+ * Handles GET request: employees / employeeId
  */
 router.get('/:employeeId', (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   // Get one employee by _id and log results/errors
   Employee.find({"empId": employeeId})
-    .select("_id empId firstName lastName position email")
+    .select("empId firstName lastName todo done")
     .exec()
     .then(doc => {
       // Respond to success and send appropriate response for number of results
       if (doc) {
         res.status(200).json({
-          product: doc,
+          employee: doc,
           request: {
             type: "GET",
             description: 'Get all employees',
@@ -128,7 +132,7 @@ router.get('/:employeeId', (req, res, next) => {
 });
 
 /**
- * Handles employee/employeeId PATCH request
+ * Handles PATCH request: employees / employeeId
  */
 router.patch('/:employeeId', (req, res, next) => {
   const employeeId = req.params.employeeId;
@@ -172,7 +176,7 @@ router.patch('/:employeeId', (req, res, next) => {
 });
 
 /**
- * Handles employee/employeeId DELETE request
+ * Handles DELETE request: employees / employeeId
  */
 router.delete('/:employeeId', (req, res, next) => {
   const taskId = req.params.employeeId;
@@ -205,5 +209,93 @@ router.delete('/:employeeId', (req, res, next) => {
       });
     });
 });
+
+/********************
+ Task handling area
+ ********************/
+
+/**
+ * Handles GET request: employee / employeeId / tasks (find - by - id)
+ */
+/*router.get('/:employeeId/tasks/:status', (req, res, next) => {
+  const employeeId = req.params.employeeId;
+  let querySelect = (req.params.status) ? 'empId ' + req.params.status : 'empId todo done doing';
+
+  // Get one employee by _id and log results/errors
+  Employee.find({
+      "empId": employeeId
+    })
+    .select(querySelect)
+    .exec()
+    .then(doc => {
+      // Respond to success and send appropriate response for number of results
+      if (doc) {
+        res.status(200).json({
+          employee: doc,
+          request: {
+            type: "GET",
+            description: 'Get all tasks for employee',
+            url: req.get('host') + employeeRoute + employeeId + '/tasks'
+          }
+        });
+      } else {
+        res.status(404).json({
+          message: 'No valid entries found using provided ID'
+        });
+      }
+    })
+    .catch(err => {
+      // Log and respond to any errors
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+});//*/
+
+/**
+ * Handles PATCH request: employee / employeeId / tasks
+ */
+/*router.patch('/:employeeId/tasks', (req, res, next) => {
+  const employeeId = req.params.employeeId;
+  const task = req.body.task;
+
+  // Get one employee by _id and log results/errors
+  Employee.update({
+        "empId": employeeId
+      }, {
+      $push: {
+        todo: {
+          _id: ObjectId(),
+          text: task
+        }
+      }
+    })
+    .exec()
+    .then(doc => {
+      // Respond to success and send appropriate response for number of results
+      if (doc) {
+        res.status(200).json({
+          employee: doc,
+          request: {
+            type: "GET",
+            description: 'Get all tasks for employee',
+            url: req.get('host') + employeeRoute + employeeId + '/tasks'
+          }
+        });
+      } else {
+        res.status(404).json({
+          message: 'No valid entries found using provided ID'
+        });
+      }
+    })
+    .catch(err => {
+      // Log and respond to any errors
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+});//*/
 
 module.exports = router;

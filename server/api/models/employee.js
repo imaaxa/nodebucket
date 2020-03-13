@@ -12,13 +12,24 @@ Description: Web 450 Capstone Project.
 const mongoose = require('mongoose');
 
 /**
+ * task schema w/ options
+ */
+const taskSchema = new mongoose.Schema({
+  text: {
+    type: String,
+    required: true
+  }
+});
+
+/**
  * employee schema w/ options
  */
 const employeeSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   empId: {
     type: Number,
-    required: true, unique: true
+    required: true,
+    unique: true
   },
   firstName: {
     type: String,
@@ -33,18 +44,11 @@ const employeeSchema = mongoose.Schema({
     default: 'authUser'
   },
   email: {
-    type: String,
-    required: true
+    type: String
   },
-  todo: {
-    type: Array,
-  },
-  done: {
-    type: Array,
-  },
-  doing: {
-    type: Array,
-  }
+  todo: [taskSchema],
+  done: [taskSchema],
+  doing: [taskSchema]
 });
 
 module.exports = mongoose.model('employee', employeeSchema);
