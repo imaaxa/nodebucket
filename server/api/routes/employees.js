@@ -100,7 +100,7 @@ router.get('/:employeeId', (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   // Get one employee by _id and log results/errors
-  Employee.findById(employeeId)
+  Employee.find({"empId": employeeId})
     .select("_id empId firstName lastName position email")
     .exec()
     .then(doc => {
@@ -150,7 +150,7 @@ router.patch('/:employeeId', (req, res, next) => {
   }
 
   // Update document with given employee ID
-  Employee.update({ _id: employeeId }, { $set: updateValues })
+  Employee.update({ empId: employeeId }, { $set: updateValues })
     .exec()
     .then(results => {
       // Respond to success
@@ -178,7 +178,7 @@ router.delete('/:employeeId', (req, res, next) => {
   const taskId = req.params.employeeId;
 
   // Delete document with given employee ID
-  Employee.remove({ _id: taskId })
+  Employee.remove({ empId: taskId })
     .exec()
     .then(results => {
       // Respond to success
