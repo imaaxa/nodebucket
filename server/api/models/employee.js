@@ -35,6 +35,15 @@ const employeeSchema = mongoose.Schema({
   email: {
     type: String,
     required: true
+  },
+  todo: {
+    type: Array,
+  },
+  done: {
+    type: Array,
+  },
+  doing: {
+    type: Array,
   }
 });
 
