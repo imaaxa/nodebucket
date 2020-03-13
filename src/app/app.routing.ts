@@ -1,19 +1,19 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {Routes} from '@angular/router';
+import {BaseLayoutComponent} from './shared/base-layout/base-layout.component';
+import {HomeComponent} from './pages/home/home.component';
 
-import { BaseLayoutComponent } from './shared/base-layout/base-layout.component';
-import { AuthLayoutComponent } from './shared/auth-layout/auth-layout.component';
-
-import { HomeComponent } from './pages/home/home.component';
-
-const routes: Routes = [
-  { path: '', component: BaseLayoutComponent },
-  { path: '', component: HomeComponent },
-  { path: 'login', component: AuthLayoutComponent }
+export const AppRoutes: Routes = [
+  {
+    path: '',
+    component: BaseLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: HomeComponent
+      }
+      /*
+        New components go here...
+       */
+    ]
+  }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
