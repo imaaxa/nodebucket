@@ -12,7 +12,8 @@
         >
         <div
           class="help-block"
-          *ngIf="loginForm.get('employeeID').touched && !loginForm.get('employeeID').valid"
+          *ngIf="loginForm.get('employeeId').touched &&
+                !loginForm.get('employeeId').valid"
         >
           Please enter a valid Employee ID.
         </div>
