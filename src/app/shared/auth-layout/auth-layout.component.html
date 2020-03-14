@@ -1,1 +1,23 @@
-<p>auth-layout works!</p>
+<div class="card">
+  <h2 class="card__title">Login</h2>
+  <div class="cart__body">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="employeeID">Employee Id</label>
+        <input
+          type="text"
+          id="employeeID"
+          formControlName="employeeId"
+          class="form-control"
+        >
+        <div
+          class="help-block"
+          *ngIf="loginForm.get('employeeID').touched && !loginForm.get('employeeID').valid"
+        >
+          Please enter a valid Employee ID.
+        </div>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>

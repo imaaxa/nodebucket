@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-auth-layout',
@@ -6,10 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./auth-layout.component.css']
 })
 export class AuthLayoutComponent implements OnInit {
+  loginForm: FormGroup;
 
   constructor() { }
 
   ngOnInit() {
+    this.loginForm = new FormGroup({
+      'employeeId': new FormControl(null, Validators.required)
+    });
   }
 
+  onSubmit() {
+    console.log(this.loginForm);
+  }
 }
