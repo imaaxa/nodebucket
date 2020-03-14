@@ -10,17 +10,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BaseLayoutComponent } from './shared/base-layout/base-layout.component';
 import { AuthLayoutComponent } from './shared/auth-layout/auth-layout.component';
 import { HomeComponent } from './pages/home/home.component';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
+import { AboutComponent } from './pages/about/about.component';
+import { TasksComponent } from './pages/tasks/tasks.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     AppComponent,
     BaseLayoutComponent,
     AuthLayoutComponent,
-    HomeComponent
+    HomeComponent,
+    AboutComponent,
+    TasksComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +32,14 @@ import {MatIconModule} from '@angular/material/icon';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(AppRoutes, { useHash: true, enableTracing: false, scrollPositionRestoration: 'enabled'}),
+    RouterModule.forRoot(
+      AppRoutes,
+      {
+        useHash: true,
+        enableTracing: false,
+        scrollPositionRestoration: 'enabled'
+      }
+    ),
     FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,
