@@ -1,28 +1,51 @@
-<div class="card">
-  <h2 class="card__title">Login</h2>
-  <div class="cart__body">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="employeeID">Employee Id</label>
-        <input
-          type="text"
-          id="employeeID"
-          formControlName="employeeId"
-          class="form-control"
-        >
-        <div
-          class="help-block"
-          *ngIf="loginForm.get('employeeId').touched &&
-                !loginForm.get('employeeId').valid"
-        >
-          Please enter a valid Employee ID.
-        </div>
+<!--
+  /*============================================;
+  Title: Node Bucket
+  Author: Cory Gilliam
+  Date: March 2020;
+  Modified By:
+  Description: Web 450 Capstone Project.
+  ===========================================*/
+-->
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <div class="card">
+      <h2 class="card__title">Login</h2>
+      <div class="cart__body">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+          <!-- Employee ID field-->
+          <div class="form-group">
+            <label for="employeeID">Employee Id</label>
+            <input
+              type="number"
+              id="employeeID"
+              formControlName="employeeId"
+              class="form-control"
+            >
+            <div class="help-block"
+              *ngIf="loginForm.get('employeeId').touched && !loginForm.get('employeeId').valid"
+            >
+              <span *ngIf="loginForm.get('employeeId').error()">
+                A numerical Employee ID is required.
+              </span>
+            </div>
+          </div>
+          <!-- End Employee ID field-->
+
+          <!-- Todo: Add password -->
+
+          <!-- Submit button-->
+          <div>
+            <button type="submit">Login</button>
+            <div class="help-block" *ngIf="loginForm.touched && !loginForm.valid">
+              Please fix form error.
+            </div>
+          </div>
+          <!-- End Submit button-->
+
+        </form>
       </div>
-      <button type="submit">Login</button>
-      <div class="help-block" *ngIf="loginForm.touched &&
-                !loginForm.valid">
-        Please fix form error.
-      </div>
-    </form>
+    </div>
   </div>
 </div>
