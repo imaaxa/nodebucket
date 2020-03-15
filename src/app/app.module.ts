@@ -9,7 +9,7 @@ import { CookieService }    from 'ngx-cookie-service';
 import { HttpClientModule, HttpClient }     from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AppRoutes }                from './app.routing';
+import { AppRoutes }               from './app.routing';
 import { AppComponent }            from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BaseLayoutComponent }     from './shared/base-layout/base-layout.component';

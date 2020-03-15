@@ -8,6 +8,8 @@ Description: Web 450 Capstone Project.
 
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: 'app-auth-layout',
@@ -16,8 +18,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class AuthLayoutComponent implements OnInit {
   loginForm: FormGroup;
+  private _loginUrl = 'http://localhost:3000/api/employees/login/'
 
-  constructor() { }
+  constructor(private http: HttpClient, private cookie: CookieService) {
+
+  }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -25,7 +30,12 @@ export class AuthLayoutComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    console.log(this.loginForm);
+  onLogin() {
+    // Call API with form data
+    const userToken = this.http.post<string>(this._loginUrl, this.loginForm.value);
+
+    // Get API responce
+    this.cookie.set('userId', this.loginForm.value.employeeId);
+    this.cookie.set('userToken', '123456');
   }
 }

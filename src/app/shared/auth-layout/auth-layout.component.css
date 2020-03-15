@@ -1,0 +1,8 @@
+.form-group .ng-invalid+.help-block {
+  color: red;
+  font-style: italic;
+  padding: 1em;
+  background-color: lightpink;
+  font-weight: bold;
+  margin: .5em 0;
+}
