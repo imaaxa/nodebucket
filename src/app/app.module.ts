@@ -1,21 +1,22 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { RouterModule} from '@angular/router';
-import { AppRoutes } from './app.routing';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BaseLayoutComponent } from './shared/base-layout/base-layout.component';
-import { AuthLayoutComponent } from './shared/auth-layout/auth-layout.component';
-import { HomeComponent } from './pages/home/home.component';
-import { AboutComponent } from './pages/about/about.component';
-import { TasksComponent } from './pages/tasks/tasks.component';
+import { BrowserModule }    from '@angular/platform-browser';
+import { NgModule }         from '@angular/core';
+import { RouterModule}      from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule }  from '@angular/material/button';
+import { MatIconModule }    from '@angular/material/icon';
+import { CookieService }    from 'ngx-cookie-service';
+import { HttpClientModule, HttpClient }     from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { AppRoutes }                from './app.routing';
+import { AppComponent }            from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BaseLayoutComponent }     from './shared/base-layout/base-layout.component';
+import { AuthLayoutComponent }     from './shared/auth-layout/auth-layout.component';
+import { HomeComponent }           from './pages/home/home.component';
+import { AboutComponent }          from './pages/about/about.component';
+import { TasksComponent }          from './pages/tasks/tasks.component';
 
 @NgModule({
   declarations: [
@@ -43,9 +44,12 @@ import { MatIconModule } from '@angular/material/icon';
     FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule,
+    MatIconModule
+
   ],
-  providers: [],
+  providers: [
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

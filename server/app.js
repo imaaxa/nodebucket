@@ -15,6 +15,7 @@ const morgan      = require('morgan');
 const bodyParser  = require('body-parser');
 const path        = require('path');
 const mongoose    = require('mongoose');
+const jwt         = require('jsonwebtoken');
 
 // Require configuration variables
 const options = require('./options');
