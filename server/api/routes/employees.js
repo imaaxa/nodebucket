@@ -110,13 +110,15 @@ router.get('/:employeeId', (req, res, next) => {
     .select("empId firstName lastName todo done")
     .exec()
     .then(doc => {
+      //(doc.length) ? console.log('Array not empty'): console.log('Array is empty');
+
       // Respond to success and send appropriate response for number of results
-      if (doc) {
+      if (doc && doc.length) {
         res.status(200).json({
           employee: doc,
           request: {
             type: "GET",
-            description: 'Get all employees <-',
+            description: 'Get all employees',
             url: req.get('host') + employeeRoute
           }
         });
