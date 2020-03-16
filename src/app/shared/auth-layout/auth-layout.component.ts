@@ -7,7 +7,7 @@ Description: Web 450 Capstone Project.
 ===========================================*/
 
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from "@angular/common/http";
 
@@ -17,25 +17,21 @@ import { HttpClient } from "@angular/common/http";
   styleUrls: ['./auth-layout.component.css']
 })
 export class AuthLayoutComponent implements OnInit {
-  loginForm: FormGroup;
-  private _loginUrl = 'http://localhost:3000/api/employees/login/'
+  private _loginUrl = 'http://localhost:3000/api/employees/login/';
 
-  constructor(private http: HttpClient, private cookie: CookieService) {
+  constructor( private http: HttpClient, private cookie: CookieService ) { }
 
-  }
+  ngOnInit() { }
 
-  ngOnInit() {
-    this.loginForm = new FormGroup({
-      'employeeId': new FormControl(null, Validators.required)
-    });
-  }
+  onLogin(form: NgForm) {
+    const value = form.value;
+    console.log(value);
 
-  onLogin() {
     // Call API with form data
-    const userToken = this.http.post<string>(this._loginUrl, this.loginForm.value);
+    //const userToken = this.http.post<string>(this._loginUrl, this.loginForm.value);
 
     // Get API responce
-    this.cookie.set('userId', this.loginForm.value.employeeId);
-    this.cookie.set('userToken', '123456');
+    //this.cookie.set('userId', this.loginForm.value.employeeId);
+    //this.cookie.set('userToken', '123456');
   }
 }

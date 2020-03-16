@@ -10,9 +10,13 @@ import { BrowserModule }    from '@angular/platform-browser';
 import { NgModule }         from '@angular/core';
 import { RouterModule}      from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule }  from '@angular/material/button';
+import { MatCardModule }    from "@angular/material/card";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIcon }          from '@angular/material/icon';
 import { MatIconModule }    from '@angular/material/icon';
+import { MatInputModule }   from "@angular/material/input";
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { CookieService }    from 'ngx-cookie-service';
 import { HttpClientModule, HttpClient }     from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -50,9 +54,12 @@ import { TasksComponent }          from './pages/tasks/tasks.component';
       }
     ),
     FlexLayoutModule,
-    MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatToolbarModule
 
   ],
   providers: [
