@@ -1,3 +1,11 @@
+/*============================================;
+Title: Node Bucket
+Author: Cory Gilliam
+Date:  March 2020;
+Modified By:
+Description: Web 450 Capstone Project.
+===========================================*/
+
 import { BrowserModule }    from '@angular/platform-browser';
 import { NgModule }         from '@angular/core';
 import { RouterModule}      from '@angular/router';

@@ -1,3 +1,11 @@
+/*============================================;
+Title: Node Bucket
+Author: Cory Gilliam
+Date:  March 2020;
+Modified By:
+Description: Web 450 Capstone Project.
+===========================================*/
+
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';

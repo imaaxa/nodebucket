@@ -1,3 +1,11 @@
+/*============================================;
+Title: Node Bucket
+Author: Cory Gilliam
+Date:  March 2020;
+Modified By:
+Description: Web 450 Capstone Project.
+===========================================*/
+
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
