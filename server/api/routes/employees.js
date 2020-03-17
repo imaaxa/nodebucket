@@ -147,35 +147,33 @@ router.patch('/:employeeId', (req, res, next) => {
  * Handles DELETE request: employees / employeeId
  */
 router.delete('/:employeeId', (req, res, next) => {
-  const taskId = req.params.employeeId;
+  const employeeId = req.params.employeeId;
 
-  // Delete document with given employee ID
-  Employee.remove({ empId: taskId })
-    .exec()
-    .then(results => {
-      // Respond to success
-      res.status(200).json({
-        message: 'Employee was deleted',
-        request: {
-          type: 'POST',
-          url: req.get('host') + employeeRoute,
-          body: {
-            empId: 'Number',
-            firstName: 'String',
-            lastName: 'String',
-            position: 'String',
-            email: 'String'
-          }
-        }
-      });
-    })
-    .catch( err => {
-      // Log and respond to any errors
+  // Get employee data for employeeId given
+  Employee.findOne({ empId: employeeId }, '_id', function(err, employee) {
+    if( err ) {
       console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+      return next(err);
+    } else {
+      // Check if employee data was returned
+      if ( employee !== null) {
+        console.log(employee);
+        employee.remove(function (err, employee) {
+          if (err) {
+            console.log(err);
+            return next(err);
+          } else {
+            console.log('Employee record has been deleted.');
+            res.status(200).json('Employee record has been deleted.');
+          }
+        });
+      } else {
+        // Handle query with no employee data returned
+        console.log('Employee could not be found. Employee not removed');
+        res.status(200).json('Employee could not be found. Employee not removed');
+      }
+    }
+  });
 });
 
 /**
