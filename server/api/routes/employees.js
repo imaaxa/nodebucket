@@ -33,26 +33,13 @@ router.get('/', (req, res, next) => {
       console.log(`Error: ${err}`);
       res.status(500).json({ error: err});
     } else {
-      console.log(`Error: ${employees}`);
-
-      const response = {
-        count: employees.length,
-        employees: employees.map(employee => {
-          return {
-            _id: employee._id,
-            empId: employee.empId,
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            position: employee.position,
-            email: employee.email,
-            request: {
-              type: "GET",
-              url: req.get('host') + employeeRoute + employee.empId
-            }
-          };
-        })
-      };
-      res.status(200).json(response);
+      if (employees) {
+        console.log(employees);
+        res.status(200).json(employees);
+      } else {
+        console.log('No employee were found.');
+        res.status(200).json('No employee were found.');
+      }
     }
   });
 });
@@ -64,21 +51,18 @@ router.get('/:employeeId', (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   // Get one employee by _id and log results/errors
-  Employee.findOne({empId: employeeId}, 'empId firstName lastName todo done', function( err, employee) {
+  Employee.findOne({empId: employeeId}, 'empId firstName lastName todo done', function( err, employee ) {
     if (err) {
       // Log and respond to DB errors
       console.log(err);
-      res.status(500).json({error: err});
+      res.status(500).json(err);
     } else {
-      if( employee ) {
-        res.status(200).json({
-          employee: employee,
-          request: {
-            type: "GET",
-            description: 'Get all employees',
-            url: req.get('host') + employeeRoute
-          }
-        });
+      if (employee !== null) {
+        console.log(employee);
+        res.status(200).json(employee);
+      } else {
+        console.log('No employee with that ID.');
+        res.status(200).json('No employee with that ID.');
       }
     }
   });
@@ -99,29 +83,20 @@ router.post('/', (req, res, next) => {
   });
 
   // Save the new employee and log results/error
-  employee
-    .save()
-    .then( results => {
-      // Respond to success
-      res.status(200).json({
-        createdEmployee: {
-          _id: results._id,
-          empId: results.empId,
-          firstName: results.firstName,
-          lastName: results.lastName,
-          position: results.position,
-          email: results.email,
-          request: {
-            type: "GET",
-            url: req.get('host') + employeeRoute + results._id
-          }
-        }
-      });
-    })
-    .catch( err => {
-      // Log and respond to any errors
+  employee.save(function(err, employee) {
+    if (err) {
+      console.log(err);
       res.status(500).json({ error: err});
-    });
+    } else {
+      if (employee !== null) {
+        console.log(employee);
+        res.status(200).json(employee);
+      } else {
+        console.log('No data was saved.');
+        res.status(200).json('No data was saved.');
+      }
+    }
+  });
 });
 
 /**
