@@ -212,7 +212,7 @@ router.get('/login/:employeeId/', (req, res, next) => {
 router.get('/:employeeId/tasks', function(req, res, next) {
   const employeeId = req.params.employeeId;
 
-  Employee.findOne({ empId: employeeId }, 'empId todo done', function( err, employee) {
+  Employee.findOne({ empId: employeeId }, 'todo done', function( err, employee) {
     if (err) {
       console.log(err);
       return next(err);
@@ -234,7 +234,7 @@ router.get('/:employeeId/tasks', function(req, res, next) {
 router.post('/:employeeId/tasks', function(req, res, next) {
   const employeeId = req.params.employeeId;
 
-  Employee.findOne({ empId: employeeId }, 'empId todo done', function( err, employee) {
+  Employee.findOne({ empId: employeeId }, 'todo done', function( err, employee) {
     if (err) {
       console.log(err);
       return next(err);
@@ -271,7 +271,7 @@ router.put('/:employeeId/tasks/:taskId', function (req, res, next) {
   const column = req.body.col;
 
   // Get employee data for the employeeId given
-  Employee.findOne({ empId: employeeId }, 'empId todo done', function (err, employee) {
+  Employee.findOne({ empId: employeeId }, 'todo done', function (err, employee) {
     // Handle any DB errors
     if (err) {
       console.log(err);
@@ -357,7 +357,7 @@ router.delete('/:employeeId/tasks/:taskId', function (req, res, next) {
   const taskId = req.params.taskId;
 
   // Get employee data for employeeId given
-  Employee.findOne({ empId: employeeId }, 'empId todo done', function (err, employee) {
+  Employee.findOne({ empId: employeeId }, 'todo done', function (err, employee) {
     // Handle any DB errors
     if (err) {
       console.log(err);
