@@ -19,9 +19,9 @@ const Employee = require('../models/employee');
 // Variables
 const employeeRoute = '/api/employees/';
 
-/********************
- Employee handling area
- ********************/
+/**************************************************
+ * Employee Requests
+ **************************************************/
 
 /**
  * Handles GET request: employees
@@ -217,7 +217,7 @@ router.delete('/:employeeId', (req, res, next) => {
 /**
  * Handles GET request: employees / login / employeeId
  */
-router.get('/login/:employeeId', (req, res, next) => {
+router.get('/login/:employeeId/', (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   // Get one employee by _id and log results/errors
@@ -252,5 +252,214 @@ router.get('/login/:employeeId', (req, res, next) => {
       });
     });
 });
+
+/**************************************************
+ * Task Requests
+ **************************************************/
+
+/**
+ * Handles GET request: All tasks for employee
+ */
+router.get('/:employeeId/tasks', function(req, res, next) {
+  const employeeId = req.params.employeeId;
+
+  Employee.findOne({ empId: employeeId }, 'empId todo done', function( err, employee) {
+    if (err) {
+      console.log(err);
+      return next(err);
+    } else {
+      if (employee) {
+        console.log(employee);
+        res.status(200).json(employee);
+      } else {
+        console.log('No employee with that ID.');
+        res.status(200).json('No employee with that ID.');
+      }
+    }
+  });
+});
+
+/**
+ * Handles POST request: Single tasks for employee
+ */
+router.post('/:employeeId/tasks', function(req, res, next) {
+  const employeeId = req.params.employeeId;
+
+  Employee.findOne({ empId: employeeId }, 'empId todo done', function( err, employee) {
+    if (err) {
+      console.log(err);
+      return next(err);
+    } else {
+      if (employee) {
+        console.log(employee);
+
+        const item = { text: req.body.text };
+
+        employee.todo.push(item);
+        employee.save(function(err, employee) {
+          if (err) {
+            console.log(err);
+            return next(err);
+          } else {
+            console.log(employee);
+            res.status(200).json(employee);
+          }
+        });
+      } else {
+        console.log('No employee with that ID. Task not saved.');
+        res.status(200).json('No employee with that ID. Task not saved.');
+      }
+    }
+  });
+});
+
+/**
+ * Handles PUT request: Single tasks for employee
+ */
+router.put('/:employeeId/tasks/:taskId', function (req, res, next) {
+  const employeeId = req.params.employeeId;
+  const taskId = req.params.taskId;
+  const column = req.body.col;
+
+  // Get employee data for the employeeId given
+  Employee.findOne({ empId: employeeId }, 'empId todo done', function (err, employee) {
+    // Handle any DB errors
+    if (err) {
+      console.log(err);
+      return next(err);
+    } else {
+      // Handle query success
+
+      // Handle query with employee data returned
+      if (employee !== null) {
+        console.log(employee);
+
+        if (column === 'done') {
+          // Get the task object from employee todo array before removal
+          const moveItem = employee.todo.find(item => item._id.toString() === taskId);
+
+          // Makesure moveItem has a result
+          if (moveItem) {
+            // Remove the task from the todo array
+            employee.todo.id(moveItem._id).remove();
+
+            // Add task to done array
+            const item = { text: moveItem.text };
+            employee.done.push(item);
+
+            // Save document to DB
+            employee.save(function(err, employee) {
+              if (err) {
+                console.log(err);
+                return next(err);
+              } else {
+                console.log(employee);
+                res.status(200).json(employee);
+              }
+            });
+          } else {
+            // Handle query with no employee data returned
+            console.log('Task Id could not be found. Task not moved');
+            res.status(200).json('Task Id could not be found. Task not moved');
+          }
+        } else if (column === 'todo') {
+          // Get the task object from employee done array before removal
+          const moveItem = employee.done.find(item => item._id.toString() === taskId);
+
+          // Makesure moveItem has a result
+          if(moveItem) {
+            // Remove the task from the done array
+            employee.done.id(moveItem._id).remove();
+
+            // Add task to todo array
+            const item = { text: moveItem.text };
+            employee.todo.push(item);
+
+            // Save document to DB
+            employee.save(function (err, employee) {
+              if (err) {
+                console.log(err);
+                return next(err);
+              } else {
+                console.log(employee);
+                res.status(200).json(employee);
+              }
+            });
+          } else {
+            // Handle query with no employee data returned
+            console.log('Task Id could not be found. Task not moved');
+            res.status(200).json('Task Id could not be found. Task not moved');
+          }
+        }
+      } else {
+        // Handle query with no employee data returned
+        console.log('No employee with that ID. Task not saved.');
+        res.status(200).json('No employee with that ID. Task not saved.');
+      }
+    }
+  });
+});
+
+/**
+ * Handles DELETE request: Single tasks for employee
+ */
+router.delete('/:employeeId/tasks/:taskId', function (req, res, next) {
+  const employeeId = req.params.employeeId;
+  const taskId = req.params.taskId;
+
+  // Get employee data for employeeId given
+  Employee.findOne({ empId: employeeId }, 'empId todo done', function (err, employee) {
+    // Handle any DB errors
+    if (err) {
+      console.log(err);
+      return next(err);
+    } else {
+      // Handle query success
+
+      // Handle query with employee data returned
+      if (employee !== null) {
+        console.log(employee);
+
+        // Try to find the task _id in the employee todo/done arrays
+        const todoItem = employee.todo.find( item => item._id.toString() === taskId);
+        const doneItem = employee.done.find( item => item._id.toString() === taskId);
+
+        // Remove task from the array that has it
+        if (todoItem) {
+          // Remove the task from the todo array
+          employee.todo.id(todoItem._id).remove();
+          employee.save(function(err, employeeTodo) {
+            if (err) {
+              console.log(err);
+              return next(err);
+            } else {
+              console.log(employeeTodo);
+              res.status(200).json(employeeTodo);
+            }
+          });
+
+          // Remove task from the array that has it
+        } else if (doneItem) {
+            // Remove the task fro the done array
+            employee.done.id(doneItem._id).remove();
+            employee.save(function (err, employeeDone) {
+              if (err) {
+                console.log(err);
+                return next(err);
+              } else {
+                console.log(employeeDone);
+                res.status(200).json(employeeDone);
+              }
+            });
+          }
+      } else {
+        // Handle query with no employee data returned
+        console.log('No employee with that ID. Task not deleted.');
+        res.status(200).json('No employee with that ID. Task not deleted.');
+      }
+    }
+  });
+});
+
 
 module.exports = router;
