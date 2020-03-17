@@ -28,35 +28,33 @@ const employeeRoute = '/api/employees/';
  */
 router.get('/', (req, res, next) => {
   // Get all employees and log results/errors
-  Employee.find()
-    .select("empId firstName lastName todo done")
-    .exec()
-    .then( docs => {
-      // Respond to success
+  Employee.find({}, 'empId firstName lastName todo done', function(err, employees) {
+    if (err) {
+      console.log(`Error: ${err}`);
+      res.status(500).json({ error: err});
+    } else {
+      console.log(`Error: ${employees}`);
+
       const response = {
-        count: docs.length,
-        employees: docs.map(doc => {
+        count: employees.length,
+        employees: employees.map(employee => {
           return {
-            _id: doc._id,
-            empId: doc.empId,
-            firstName: doc.firstName,
-            lastName: doc.lastName,
-            position: doc.position,
-            email: doc.email,
+            _id: employee._id,
+            empId: employee.empId,
+            firstName: employee.firstName,
+            lastName: employee.lastName,
+            position: employee.position,
+            email: employee.email,
             request: {
               type: "GET",
-              url: req.get('host') + employeeRoute + doc.empId
+              url: req.get('host') + employeeRoute + employee.empId
             }
           };
         })
       };
       res.status(200).json(response);
-    })
-    .catch( err => {
-      // Log and respond to any errors
-      console.log(err);
-      res.status(500).json({ error: err});
-    });
+    }
+  });
 });
 
 /**
