@@ -182,37 +182,24 @@ router.delete('/:employeeId', (req, res, next) => {
 router.get('/login/:employeeId/', (req, res, next) => {
   const employeeId = req.params.employeeId;
 
-  // Get one employee by _id and log results/errors
-  Employee.find({
-      "empId": employeeId
-    })
-    .select("empId firstName lastName todo done")
-    .exec()
-    .then(doc => {
-      // Respond to success and send appropriate response for number of results
-      if (doc) {
-        // Create jwt
-        let payload = {
-          subject: doc._id
-        };
-        let token = jwt.sign(payload, options.storageConfig.env.JWT_KEY);
-
-        res.status(200).json({
-          empToken: token
-        });
-      } else {
-        res.status(404).json({
-          message: 'No valid entry found using provided ID'
-        });
-      }
-    })
-    .catch(err => {
-      // Log and respond to any errors
+  Employee.findOne({ empId: employeeId }, '_id', function( err, employee) {
+    if (err) {
       console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+      res.status(500).json(err);
+    } else {
+      console.log(employee);
+
+      if (employee != null) {
+        // Create jwt
+        let payload = {subject: employee._id};
+        let token = jwt.sign(payload, options.storageConfig.env.JWT_KEY);
+        res.status(200).json(token);
+      } else {
+        console.log('There was no employee returned.');
+        res.status(200).json('There was no employee returned.');
+      }
+    }
+  });
 });
 
 /**************************************************
