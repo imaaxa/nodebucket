@@ -60,6 +60,33 @@ router.get('/', (req, res, next) => {
 });
 
 /**
+ * Handles GET request: employees / employeeId
+ */
+router.get('/:employeeId', (req, res, next) => {
+  const employeeId = req.params.employeeId;
+
+  // Get one employee by _id and log results/errors
+  Employee.findOne({empId: employeeId}, 'empId firstName lastName todo done', function( err, employee) {
+    if (err) {
+      // Log and respond to DB errors
+      console.log(err);
+      res.status(500).json({error: err});
+    } else {
+      if( employee ) {
+        res.status(200).json({
+          employee: employee,
+          request: {
+            type: "GET",
+            description: 'Get all employees',
+            url: req.get('host') + employeeRoute
+          }
+        });
+      }
+    }
+  });
+});
+
+/**
  * Handles POST request: employees
  */
 router.post('/', (req, res, next) => {
@@ -96,42 +123,6 @@ router.post('/', (req, res, next) => {
     .catch( err => {
       // Log and respond to any errors
       res.status(500).json({ error: err});
-    });
-});
-
-/**
- * Handles GET request: employees / employeeId
- */
-router.get('/:employeeId', (req, res, next) => {
-  const employeeId = req.params.employeeId;
-
-  // Get one employee by _id and log results/errors
-  Employee.find({"empId": employeeId})
-    .select("empId firstName lastName todo done")
-    .exec()
-    .then(doc => {
-      //(doc.length) ? console.log('Array not empty'): console.log('Array is empty');
-
-      // Respond to success and send appropriate response for number of results
-      if (doc && doc.length) {
-        res.status(200).json({
-          employee: doc,
-          request: {
-            type: "GET",
-            description: 'Get all employees',
-            url: req.get('host') + employeeRoute
-          }
-        });
-      } else {
-        res.status(404).json({
-          message: 'No valid entry found using provided ID'
-        });
-      }
-    })
-    .catch(err => {
-      // Log and respond to any errors
-      console.log(err);
-      res.status(500).json({error: err});
     });
 });
 
