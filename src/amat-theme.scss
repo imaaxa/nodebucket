@@ -1,0 +1,11 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$node-bucket-primary: mat-palette($mat-indigo);
+$node-bucket-accent: mat-palette($mat-pink, A200, A100, A400);
+$node-bucket-warn: mat-palette($mat-red);
+
+$node-bucket: mat-light-theme($node-bucket-primary, $node-bucket-accent, $node-bucket-warn);
+
+@include angular-material-theme($node-bucket)
