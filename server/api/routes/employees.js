@@ -33,7 +33,7 @@ router.get('/', (req, res, next) => {
       console.log(`Error: ${err}`);
       res.status(500).json({ error: err});
     } else {
-      if (employees) {
+      if (employee !== null) {
         console.log(employees);
         res.status(200).json(employees);
       } else {
@@ -217,7 +217,7 @@ router.get('/:employeeId/tasks', function(req, res, next) {
       console.log(err);
       return next(err);
     } else {
-      if (employee) {
+      if (employee !== null) {
         console.log(employee);
         res.status(200).json(employee);
       } else {
@@ -239,7 +239,7 @@ router.post('/:employeeId/tasks', function(req, res, next) {
       console.log(err);
       return next(err);
     } else {
-      if (employee) {
+      if (employee !== null) {
         console.log(employee);
 
         const item = { text: req.body.text };
