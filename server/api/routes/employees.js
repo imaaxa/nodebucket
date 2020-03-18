@@ -29,20 +29,22 @@ const employeeRoute = '/api/employees/';
  */
 router.get('/', (req, res, next) => {
   // Get all employees and log results/errors
-  Employee.find({}, 'empId firstName lastName todo done', function(err, employees) {
-    if (err) {
-      console.log(`Error: ${err}`);
-      res.status(500).json({ error: err});
-    } else {
+  Employee.find()
+    .select('empId firstName lastName todo done')
+    .exec()
+    .then( employee => {
       if (employee !== null) {
-        console.log(employees);
-        res.status(200).json(employees);
+        console.log(employee);
+        res.status(200).json(employee);
       } else {
-        console.log('No employee were found.');
-        res.status(200).json('No employee were found.');
+        console.log('No employees were found.');
+        res.status(200).json('No employees were found.');
       }
-    }
-  });
+    })
+    .catch( err => {
+      console.log(`Error: ${err}`);
+      res.status(500).json(err);
+    });
 });
 
 /**
