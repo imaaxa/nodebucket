@@ -8,6 +8,7 @@ Description: Web 450 Capstone Project.
 
 // Requires
 const options = require('../../options');
+const checkAuth = require('../../check-auth');
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -71,7 +72,7 @@ router.get('/:employeeId', (req, res, next) => {
 /**
  * Handles POST request: employees
  */
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
   // Create a new task with the Employee schema
   const employee = new Employee({
     _id: new mongoose.Types.ObjectId(),
@@ -102,7 +103,7 @@ router.post('/', (req, res, next) => {
 /**
  * Handles PATCH request: employees / employeeId
  */
-router.patch('/:employeeId', (req, res, next) => {
+router.patch('/:employeeId', checkAuth, (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   /*
@@ -146,7 +147,7 @@ router.patch('/:employeeId', (req, res, next) => {
 /**
  * Handles DELETE request: employees / employeeId
  */
-router.delete('/:employeeId', (req, res, next) => {
+router.delete('/:employeeId', checkAuth, (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   // Get employee data for employeeId given
@@ -176,12 +177,17 @@ router.delete('/:employeeId', (req, res, next) => {
   });
 });
 
+/**************************************************
+ * Task Authentication
+ **************************************************/
+
 /**
  * Handles GET request: employees / login / employeeId
  */
 router.get('/login/:employeeId/', (req, res, next) => {
   const employeeId = req.params.employeeId;
 
+  // Find employee by empId
   Employee.findOne({ empId: employeeId }, '_id', function( err, employee) {
     if (err) {
       console.log(err);
@@ -209,7 +215,7 @@ router.get('/login/:employeeId/', (req, res, next) => {
 /**
  * Handles GET request: All tasks for employee
  */
-router.get('/:employeeId/tasks', function(req, res, next) {
+router.get('/:employeeId/tasks', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
 
   Employee.findOne({ empId: employeeId }, 'todo done', function( err, employee) {
@@ -231,7 +237,7 @@ router.get('/:employeeId/tasks', function(req, res, next) {
 /**
  * Handles POST request: Single tasks for employee
  */
-router.post('/:employeeId/tasks', function(req, res, next) {
+router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
 
   Employee.findOne({ empId: employeeId }, 'todo done', function( err, employee) {
@@ -265,7 +271,7 @@ router.post('/:employeeId/tasks', function(req, res, next) {
 /**
  * Handles PUT request: Single tasks for employee
  */
-router.put('/:employeeId/tasks/:taskId', function (req, res, next) {
+router.put('/:employeeId/tasks/:taskId', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
   const taskId = req.params.taskId;
   const column = req.body.col;
@@ -352,7 +358,7 @@ router.put('/:employeeId/tasks/:taskId', function (req, res, next) {
 /**
  * Handles DELETE request: Single tasks for employee
  */
-router.delete('/:employeeId/tasks/:taskId', function (req, res, next) {
+router.delete('/:employeeId/tasks/:taskId', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
   const taskId = req.params.taskId;
 
