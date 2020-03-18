@@ -3,9 +3,9 @@
     "DEV": false
   },
   "env": {
-    "MONGO_ATLAS_NAME":  "nodeBucketApp",
-    "MONGO_ATLAS_PW":    "Zzxcvbnm",
-    "MONGO_ATLAS_TABLE": "nodebucket",
-    "JWT_KEY": "Kg74#mh7cCn871nxc8h4"
+    "MONGO_ATLAS_NAME":  "<user_name>",
+    "MONGO_ATLAS_PW":    "<password>",
+    "MONGO_ATLAS_TABLE": "<table_name>",
+    "JWT_KEY": "<secret_key>"
   }
 }
