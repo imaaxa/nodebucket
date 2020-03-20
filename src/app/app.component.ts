@@ -3,7 +3,7 @@ Title: Node Bucket
 Author: Cory Gilliam
 Date:  March 2020;
 Modified By:
-Description: Web 450 Capstone Project.
+Description: Main app component.
 ===========================================*/
 
 import { Component } from '@angular/core';

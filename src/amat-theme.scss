@@ -2,7 +2,7 @@
 
 @include mat-core();
 
-$node-bucket-primary: mat-palette($mat-indigo);
+$node-bucket-primary: mat-palette($mat-blue, A300);
 $node-bucket-accent: mat-palette($mat-pink, A200, A100, A400);
 $node-bucket-warn: mat-palette($mat-red);
 

@@ -3,7 +3,7 @@ Title: Node Bucket
 Author: Cory Gilliam
 Date:  March 2020;
 Modified By:
-Description: Web 450 Capstone Project.
+Description: Angular module declarations.
 ===========================================*/
 
 import { BrowserModule }    from '@angular/platform-browser';
@@ -12,6 +12,7 @@ import { RouterModule}      from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule }  from '@angular/material/button';
 import { MatCardModule }    from "@angular/material/card";
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIcon }          from '@angular/material/icon';
 import { MatIconModule }    from '@angular/material/icon';
@@ -48,7 +49,7 @@ import { TasksComponent }          from './pages/tasks/tasks.component';
     RouterModule.forRoot(
       AppRoutes,
       {
-        useHash: true,
+        useHash: false,
         enableTracing: false,
         scrollPositionRestoration: 'enabled'
       }
@@ -56,6 +57,7 @@ import { TasksComponent }          from './pages/tasks/tasks.component';
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,

@@ -3,7 +3,7 @@ Title: Node Bucket
 Author: Cory Gilliam
 Date:  March 2020;
 Modified By:
-Description: Web 450 Capstone Project.
+Description: Handles Angular application routing.
 ===========================================*/
 
 import { Routes } from '@angular/router';
@@ -18,6 +18,7 @@ export const AppRoutes: Routes = [
   {
     path: '', component: BaseLayoutComponent,
     children: [
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
       { path: 'tasks', component: TasksComponent },
