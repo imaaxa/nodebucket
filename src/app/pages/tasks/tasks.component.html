@@ -4,7 +4,54 @@
   Author: Cory Gilliam
   Date: March 2020;
   Modified By:
-  Description: Web 450 Capstone Project.
+  Description: Display two columns with all of the tasks.
   ===========================================*/
 -->
-<p>tasks works!</p>
+
+<!-- Component wrapper -->
+<div class="container" role="region" fxLayout="row" fxLayout.xs="column" fxLayoutGap="2em" fxLayoutAlign="center">
+
+  <!-- Todo List -->
+  <mat-card role="group" fxFlex="50%">
+
+    <mat-card-header>
+      <mat-card-title>Todo</mat-card-title>
+    </mat-card-header>
+
+
+    <mat-card *ngIf="todoTasks.length > 0" fxLayout="column" fxLayoutGap="1em">
+
+      <mat-expansion-panel *ngFor="let task of todoTasks">
+
+        <mat-expansion-panel-header>
+
+          <mat-panel-title>Task</mat-panel-title>
+
+          <mat-icon class="drag_handle grabable"> drag_handle</mat-icon>
+
+        </mat-expansion-panel-header>
+
+        <mat-card-content>
+          <p>{{ task.text }}</p>
+        </mat-card-content>
+
+        <mat-action-row>
+          <button mat-button matTooltip="Edit this task." (click)="showDialog()">
+            <mat-icon class="edit">edit</mat-icon>
+          </button>
+          <button mat-button matTooltip="Delete this task.">
+            <span class="icon-container">
+              <mat-icon class="del">delete</mat-icon>
+              <mat-icon class="del del-hover">delete_forever</mat-icon>
+            </span>
+          </button>
+        </mat-action-row>
+
+      </mat-expansion-panel>
+
+    </mat-card>
+    <p class="info-text mat-body-1" *ngIf="todoTasks.length <= 0">No tasks to display.</p>
+
+  </mat-card>
+
+</div>
