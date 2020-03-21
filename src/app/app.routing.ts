@@ -1,3 +1,4 @@
+import { AuthGuard } from './auth.guard';
 /*============================================;
 Title: Node Bucket
 Author: Cory Gilliam
@@ -21,7 +22,7 @@ export const AppRoutes: Routes = [
       { path: '', redirectTo: '/home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'tasks', component: TasksComponent },
+      { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
       { path: 'login', component: AuthLayoutComponent },
     ]
   }

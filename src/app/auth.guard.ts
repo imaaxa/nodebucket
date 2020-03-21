@@ -1,8 +1,8 @@
 /*============================================;
 Title: Node Bucket
-Author: Cory Gilliam
+Author: Krasso
 Date:  March 2020;
-Modified By:
+Modified By:Cory Gilliam
 Description: Web 450 Capstone Project.
 ===========================================*/
 
@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-      const sessionUser = this.cookieService.get('session_user');
+    const sessionUser = this.cookieService.get('session_user');
 
     // If the cookie is present, allow the user to access the app
     if (sessionUser) {
