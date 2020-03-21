@@ -210,7 +210,7 @@ router.get('/login/:employeeId/', (req, res, next) => {
         // Create jwt and return token
         let payload = {subject: employee._id};
         let token = jwt.sign(payload, options.storageConfig.env.JWT_KEY);
-        res.status(200).json(token);
+        res.status(200).json({token});
       } else {
         // Handle no employee data returned
         dev ? console.log('There was no employee returned.') : '';
