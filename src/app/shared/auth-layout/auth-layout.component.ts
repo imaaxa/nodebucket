@@ -36,21 +36,28 @@ export class AuthLayoutComponent implements OnInit {
     const empId = form.value.employeeId;
 
     // Call API with form data
-    this.http.get(this._loginUrl + empId)
-      .subscribe(res => {
-        if (res) {
-          this.cookieService.set('session_user', empId);
-          this.router.navigate(['/tasks']);
-        } else {
-          this.snackBar.open(
-            'The eployee ID you entered is invalid, please try again',
-            'ERROR',
-            {
-              duration: 2000,
-              verticalPosition: 'top'
-            }
-          );
+    //this.http.get(this._loginUrl + empId)
+    this.http.get<{message: string}>(this._loginUrl + empId)
+      .subscribe(
+        res => {
+          if (res) {
+            console.log(res);
+
+            //this.cookieService.set('session_user', empId);
+            this.cookieService.set('session_user', res.token);
+            this.cookieService.set('userID', empId);
+            this.router.navigate(['/tasks']);
+          } else {
+            this.snackBar.open(
+              'The eployee ID you entered is invalid, please try again',
+              'ERROR',
+              {
+                duration: 2000,
+                verticalPosition: 'top'
+              }
+            );
+          }
         }
-      });
+      );
   }
 }

@@ -225,7 +225,7 @@ router.get('/login/:employeeId/', (req, res, next) => {
  **************************************************/
 
 /**
- * Handles GET request: All tasks for employee
+ * Handles GET request: All tasks for employee: checkAuth,
  */
 router.get('/:employeeId/tasks', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;

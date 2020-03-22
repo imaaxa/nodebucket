@@ -7,7 +7,7 @@ Description: Task page.
 ===========================================*/
 
 import { Component, OnInit, Inject } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CookieService } from 'ngx-cookie-service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
@@ -31,11 +31,17 @@ export class TasksComponent implements OnInit {
   // Build on load
   ngOnInit(): void {
     // Get employee ID from cookie and build task request URL
-    this.empId = this.cookieService.get('session_user');
+    this.empId = this.cookieService.get('userID');
     this.loginUrl = 'http://localhost:3000/api/employees/' + this.empId + '/tasks';
+    const opts = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.cookieService.get('session_user')
+      })
+    };
+console.log(opts.headers.get('Authorization'));
 
     // Request all the tasks for the employee
-    this.http.get<{message: string}>(this.loginUrl)
+    this.http.get<{ message: string }>(this.loginUrl, opts)
       .subscribe(
         employee => {
           this.todoTasks = employee.todo;
