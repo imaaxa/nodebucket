@@ -25,6 +25,7 @@ import { CookieService }    from 'ngx-cookie-service';
 import { HttpClientModule, HttpClient }     from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 import { AppRoutes }               from './app.routing';
 import { AppComponent }            from './app.component';
@@ -67,7 +68,8 @@ import { EditTasksComponent }      from './edit-tasks/edit-tasks.component';
     MatIconModule,
     MatInputModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    DragDropModule
   ],
   providers: [
     AuthGuard,

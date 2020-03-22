@@ -9,7 +9,7 @@ Description: Task page.
 import { Component, OnInit, Inject } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { CookieService } from 'ngx-cookie-service';
-import { map } from "rxjs/operators";
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 import { EditTasksComponent } from "../../edit-tasks/edit-tasks.component";
 
@@ -21,8 +21,8 @@ import { EditTasksComponent } from "../../edit-tasks/edit-tasks.component";
 export class TasksComponent implements OnInit {
   private empId;
   private loginUrl;
-  private todoTasks = [];
-  private doneTasks = [];
+  private todoTasks: Object[] = [];
+  private doneTasks: Object[] = [];
 
   constructor(
     private cookieService: CookieService,
@@ -49,9 +49,32 @@ export class TasksComponent implements OnInit {
   }
 
   // Edit/Create modal window
-  showDialog(): void {
-    console.log('Dialog open event.');
+  showDialog(_id: string): void {
+    console.log(_id);
 
+  }
+
+  // Delete task
+  onDelete(_id: string): void {
+    console.log(_id);
+  }
+
+  // Drag&Drop
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
   }
 
 }
