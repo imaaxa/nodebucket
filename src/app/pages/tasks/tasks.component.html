@@ -17,7 +17,6 @@
   fxLayoutGap="2em"
   fxFlexAlign="center"
   fxLayoutAlign="center"
-
   >
 
   <!-- Todo List -->
@@ -31,16 +30,14 @@
       <mat-card-title>Todo</mat-card-title>
     </mat-card-header>
 
-
     <mat-card
-      *ngIf="todoTasks.length > 0"
       fxLayout="column"
       fxLayoutGap="1em"
       cdkDropList
-      [cdkDropListData]="todoTasks"
-      (cdkDropListDropped)="drop($event)"
-      [cdkDropListConnectedTo]="doneList"
       #todoList="cdkDropList"
+      [cdkDropListData]="todoTasks"
+      [cdkDropListConnectedTo]="doneList"
+      (cdkDropListDropped)="drop($event)"
       >
 
       <mat-expansion-panel
@@ -69,18 +66,19 @@
               <mat-icon class="del">delete</mat-icon>
               <mat-icon class="del del-hover">delete_forever</mat-icon>
             </span>
-          </button>
-        </mat-action-row>
+            </button>
+          </mat-action-row>
 
-      </mat-expansion-panel>
+        </mat-expansion-panel>
 
-    </mat-card>
-    <p class="info-text mat-body-1" *ngIf="todoTasks.length <= 0">No tasks to display.</p>
-
+      </mat-card>
   </mat-card>
 
   <!-- Done List -->
-  <mat-card role="group" class="task__card" fxFlex="40em">
+  <mat-card
+    role="group"
+    class="task__card"
+    fxFlex="40em">
 
     <mat-card-header>
       <mat-card-title>Done</mat-card-title>
@@ -88,14 +86,13 @@
 
 
     <mat-card
-      *ngIf="doneTasks.length > 0"
       fxLayout="column"
       fxLayoutGap="1em"
       cdkDropList
-      [cdkDropListData]="doneTasks"
-      (cdkDropListDropped)="drop($event)"
-      [cdkDropListConnectedTo]="todoList"
       #doneList="cdkDropList"
+      [cdkDropListData]="doneTasks"
+      [cdkDropListConnectedTo]="todoList"
+      (cdkDropListDropped)="drop($event)"
       >
 
       <mat-expansion-panel
@@ -128,10 +125,7 @@
         </mat-action-row>
 
       </mat-expansion-panel>
-
     </mat-card>
-    <p class="info-text mat-body-1" *ngIf="doneTasks.length <= 0">No tasks to display.</p>
-
   </mat-card>
 
 </div>

@@ -38,7 +38,6 @@ export class TasksComponent implements OnInit {
         'Authorization': 'Bearer ' + this.cookieService.get('session_user')
       })
     };
-console.log(opts.headers.get('Authorization'));
 
     // Request all the tasks for the employee
     this.http.get<{ message: string, todo: Object[], done: Object[] }>(this.loginUrl, opts)
@@ -70,15 +69,13 @@ console.log(opts.headers.get('Authorization'));
       moveItemInArray(
         event.container.data,
         event.previousIndex,
-        event.currentIndex
-      );
+        event.currentIndex);
     } else {
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
-        event.currentIndex
-      );
+        event.currentIndex);
     }
   }
 
