@@ -41,7 +41,7 @@ export class TasksComponent implements OnInit {
 console.log(opts.headers.get('Authorization'));
 
     // Request all the tasks for the employee
-    this.http.get<{ message: string }>(this.loginUrl, opts)
+    this.http.get<{ message: string, todo: Object[], done: Object[] }>(this.loginUrl, opts)
       .subscribe(
         employee => {
           this.todoTasks = employee.todo;
@@ -51,7 +51,6 @@ console.log(opts.headers.get('Authorization'));
           console.log(err);
         }
       );
-
   }
 
   // Edit/Create modal window
