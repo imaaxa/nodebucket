@@ -35,6 +35,7 @@ import { HomeComponent }           from './pages/home/home.component';
 import { AboutComponent }          from './pages/about/about.component';
 import { TasksComponent }          from './pages/tasks/tasks.component';
 import { EditTasksComponent }      from './edit-tasks/edit-tasks.component';
+import { MissingComponent } from './pages/missing/missing.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { EditTasksComponent }      from './edit-tasks/edit-tasks.component';
     HomeComponent,
     AboutComponent,
     TasksComponent,
-    EditTasksComponent
+    EditTasksComponent,
+    MissingComponent
   ],
   imports: [
     BrowserModule,
