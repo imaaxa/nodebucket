@@ -18,6 +18,10 @@ const taskSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true
+  },
+  title: {
+    type: String,
+    required: true
   }
 });
 

@@ -13,7 +13,7 @@
   class="container"
   role="region"
   fxLayout="row"
-  fxLayout.md="column"
+  fxLayout.sm="column"
   fxLayoutGap="2em"
   fxFlexAlign="center"
   fxLayoutAlign="center"
@@ -47,7 +47,7 @@
 
         <mat-expansion-panel-header>
 
-          <mat-panel-title>Task</mat-panel-title>
+          <mat-panel-title>{{ task.title }}</mat-panel-title>
 
           <div class="drag_hanle__wrapper">
             <mat-icon class="drag_handle grabable"> drag_handle</mat-icon>
@@ -105,7 +105,7 @@
 
         <mat-expansion-panel-header>
 
-          <mat-panel-title>Task</mat-panel-title>
+          <mat-panel-title>{{ task.title }}</mat-panel-title>
 
           <div class="drag_hanle__wrapper">
             <mat-icon class="drag_handle grabable"> drag_handle</mat-icon>
@@ -122,7 +122,7 @@
           <button mat-button matTooltip="Edit this task." (click)="showDialog(task._id)">
             <mat-icon class="edit">edit</mat-icon>
           </button>
-          <button mat-button matTooltip="Delete this task." (click)="showDialog(task._id)">
+          <button mat-button matTooltip="Delete this task." (click)="onDelete(task._id)">
             <span class="icon-container">
               <mat-icon class="del">delete</mat-icon>
               <mat-icon class="del del-hover">delete_forever</mat-icon>
