@@ -9,11 +9,9 @@ Description: Task service.
 import { CookieService }  from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable }     from '@angular/core';
-import { MatDialog }      from '@angular/material/dialog';
 import { Subject }        from 'rxjs';
 
 import { Task }               from './task.model';
-import { EditTasksComponent } from './edit-tasks/edit-tasks.component';
 
 @Injectable({providedIn: 'root'})
 export class TaskService {
