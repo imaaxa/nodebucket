@@ -6,12 +6,16 @@ Modified By:
 Description: Task page.
 ===========================================*/
 
-import { Component, OnInit, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { CookieService } from 'ngx-cookie-service';
+import { Component, OnInit, Inject, OnDestroy }  from '@angular/core';
+import { CookieService }              from 'ngx-cookie-service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { HttpClient, HttpHeaders }    from "@angular/common/http";
+import { Router }                     from "@angular/router";
+import { Subscription, from }         from "rxjs";
 
-import { EditTasksComponent } from "../../edit-tasks/edit-tasks.component";
+import { TaskService }        from "../tasks.services";
+import { Task }               from "../task.model";
+import { EditTasksComponent } from '../edit-tasks/edit-tasks.component';
 
 @Component({
   selector: 'app-tasks',
@@ -19,48 +23,48 @@ import { EditTasksComponent } from "../../edit-tasks/edit-tasks.component";
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-  private empId;
-  private loginUrl;
-  private todoTasks: Object[] = [];
-  private doneTasks: Object[] = [];
+  private taskSub: Subscription;
+
+  todoTasks: Task[] = [];
+  doneTasks: Task[] = [];
 
   constructor(
+    public taskService: TaskService,
     private cookieService: CookieService,
-    private http: HttpClient) { }
+    private http: HttpClient,
+    private router: Router
+  ) { }
 
-  // Build on load
+  // Retreive tasks on load
   ngOnInit(): void {
-    // Get employee ID from cookie and build task request URL
-    this.empId = this.cookieService.get('userID');
-    this.loginUrl = 'http://localhost:3000/api/employees/' + this.empId + '/tasks';
-    const opts = {
-      headers: new HttpHeaders({
-        'Authorization': 'Bearer ' + this.cookieService.get('session_user')
-      })
-    };
+    // Reteive tasks for service instance
+    this.taskService.getTasks('todo');
+    this.taskService.getTaskUpdateListener('todo').subscribe((tasks: Task[]) => {
+      this.todoTasks = tasks;
+    });
 
-    // Request all the tasks for the employee
-    this.http.get<{ message: string, todo: Object[], done: Object[] }>(this.loginUrl, opts)
-      .subscribe(
-        employee => {
-          this.todoTasks = employee.todo;
-          this.doneTasks = employee.done;
-        },
-        err => {
-          console.log(err);
-        }
-      );
+    this.taskService.getTasks('done');
+    this.taskService.getTaskUpdateListener('done').subscribe((tasks: Task[]) => {
+      this.doneTasks = tasks;
+    });
   }
 
   // Edit/Create modal window
   showDialog(_id: string): void {
     console.log(_id);
-
   }
 
   // Delete task
   onDelete(_id: string): void {
     console.log(_id);
+  }
+
+  // Update the task arrays in DB
+  onPut(): void {
+  }
+
+  onTaskCreated(task) {
+    this.todoTasks.push(task);
   }
 
   // Drag&Drop

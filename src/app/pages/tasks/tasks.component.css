@@ -30,6 +30,12 @@
   background: #2699FB;
 }
 
+.mat-expansion-panel-header-title {
+  font-style: italic;
+  flex-grow: 3;
+  max-width: 71%;
+}
+
 .mat-expansion-panel-header-title,
 .mat-expansion-panel-header-description,
 .drag_handle {
@@ -37,11 +43,12 @@
 }
 
 .drag_hanle__wrapper {
-  padding: 0 3em 0 1em;
+  /*padding: 0 3em 0 1em;*/
+  flex-grow: 1;
 }
 
 .mat-icon.drag_handle {
-  width: 16px;
+  width: 15px;
 }
 
 .mat-expansion-indicator {
@@ -104,6 +111,6 @@
   transform: translateX(-24px);
 }
 
-.cdk-drag-preview {
-  transform: rotate(8deg);
+.add_circle {
+  padding-right: 1em;
 }

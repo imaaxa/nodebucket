@@ -1,4 +1,3 @@
-import { AuthGuard } from './auth.guard';
 /*============================================;
 Title: Node Bucket
 Author: Cory Gilliam
@@ -7,46 +6,48 @@ Modified By:
 Description: Angular module declarations.
 ===========================================*/
 
-import { BrowserModule }    from '@angular/platform-browser';
-import { NgModule }         from '@angular/core';
-import { RouterModule}      from '@angular/router';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule }  from '@angular/material/button';
-import { MatCardModule } from "@angular/material/card";
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIcon }          from '@angular/material/icon';
-import { MatIconModule }    from '@angular/material/icon';
-import { MatInputModule }   from "@angular/material/input";
-import { MatSnackBar }   from "@angular/material/snack-bar";
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { CookieService }    from 'ngx-cookie-service';
-import { HttpClientModule, HttpClient }     from '@angular/common/http';
+import { BrowserAnimationsModule }          from '@angular/platform-browser/animations';
+import { BrowserModule }                    from '@angular/platform-browser';
+import { CookieService }                    from 'ngx-cookie-service';
+import { DragDropModule }                   from '@angular/cdk/drag-drop';
+import { FlexLayoutModule }                 from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DragDropModule } from "@angular/cdk/drag-drop";
+import { HttpClientModule, HttpClient }     from '@angular/common/http';
+import { MatButtonModule }                  from '@angular/material/button';
+import { MatCardModule }                    from '@angular/material/card';
+import { MatDialogModule }                  from '@angular/material/dialog';
+import { MatExpansionModule }               from '@angular/material/expansion';
+import { MatFormFieldModule }               from '@angular/material/form-field';
+import { MatIcon }                          from '@angular/material/icon';
+import { MatIconModule }                    from '@angular/material/icon';
+import { MatInputModule }                   from '@angular/material/input';
+import { MatSnackBar }                      from '@angular/material/snack-bar';
+import { MatToolbarModule }                 from '@angular/material/toolbar';
+import { MatTooltipModule }                 from '@angular/material/tooltip';
+import { NgModule }                         from '@angular/core';
+import { RouterModule}                      from '@angular/router';
 
-import { AppRoutes }               from './app.routing';
-import { AppComponent }            from './app.component';
-import { BaseLayoutComponent }     from './shared/base-layout/base-layout.component';
-import { AuthLayoutComponent }     from './shared/auth-layout/auth-layout.component';
-import { HomeComponent }           from './pages/home/home.component';
-import { AboutComponent }          from './pages/about/about.component';
-import { TasksComponent }          from './pages/tasks/tasks.component';
-import { EditTasksComponent }      from './edit-tasks/edit-tasks.component';
-import { MissingComponent } from './pages/missing/missing.component';
+import { AboutComponent }      from './pages/about/about.component';
+import { AppComponent }        from './app.component';
+import { AppRoutes }           from './app.routing';
+import { AuthGuard }           from './auth.guard';
+import { AuthLayoutComponent } from './shared/auth-layout/auth-layout.component';
+import { BaseLayoutComponent } from './shared/base-layout/base-layout.component';
+import { EditTasksComponent }  from './pages/edit-tasks/edit-tasks.component';
+import { HomeComponent }       from './pages/home/home.component';
+import { MissingComponent }    from './pages/missing/missing.component';
+import { TasksComponent }      from './pages/tasks/tasks.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    BaseLayoutComponent,
-    AuthLayoutComponent,
-    HomeComponent,
     AboutComponent,
-    TasksComponent,
+    AppComponent,
+    AuthLayoutComponent,
+    BaseLayoutComponent,
     EditTasksComponent,
-    MissingComponent
+    HomeComponent,
+    MissingComponent,
+    TasksComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +66,7 @@ import { MissingComponent } from './pages/missing/missing.component';
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
+    MatDialogModule,
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,

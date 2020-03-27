@@ -36,7 +36,6 @@ export class AuthLayoutComponent implements OnInit {
     const empId = form.value.employeeId;
 
     // Call API with form data
-    //this.http.get(this._loginUrl + empId)
     this.http.get<{message: string, token: string}>(this._loginUrl + empId)
       .subscribe(
         res => {

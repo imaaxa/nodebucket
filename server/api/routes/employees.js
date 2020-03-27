@@ -254,6 +254,7 @@ router.get('/:employeeId/tasks', checkAuth, function (req, res, next) {
  */
 router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
+  console.log(req.body);
 
   Employee.findOne({empId: employeeId}, 'todo done', function(err, employee) {
     if (err) {
@@ -263,16 +264,19 @@ router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
       if (employee !== null) {
         // Handle employee data being returned
         dev ? console.log(employee) : '';
-        const item = {text: req.body.text};
+        const item = {title: req.body.title, text: req.body.text};
+
         employee.todo.push(item);
         employee.save(function(err, employee) {
+
           if (err) {
             dev ? console.log(err) : '';
             return next(err);
           } else {
             dev ? console.log(employee) : '';
-            res.status(200).json(employee);
+            res.status(201).json(employee);
           }
+
         });
       } else {
         // Handle no employee data returned
@@ -286,87 +290,33 @@ router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
 /**
  * Handles PUT request: Single tasks for employee
  */
-router.put('/:employeeId/tasks/:taskId', checkAuth, function (req, res, next) {
+router.put('/:employeeId/tasks', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
-  const taskId = req.params.taskId;
-  const column = req.body.col;
+  const todo = req.body.todo;
+  const done = req.body.done;
 
   // Get employee data for the employeeId given
   Employee.findOne({empId: employeeId}, 'todo done', function (err, employee) {
-    if (err) {
-      // Handle any DB errors
-      dev ? console.log(err) : '';
+    if (err) { // Handle any DB errors
       return next(err);
-    } else {
-      if (employee !== null) {
-        // Handle employee data being returned
-        dev ? console.log(employee) : '';
+    } else { // Handle DB return data
+      if (employee !== null) { // Handle employee data returned
+        // Replace current todo/done arrays with arrays sent in request
+        employee.set({
+          todo: this.todo,
+          done: this.done
+        });
 
-        if (column === 'done') {
-          // Get the task object from employee todo array before removal
-          const moveItem = employee.todo.find(item => item._id.toString() === taskId);
-
-          // Makesure moveItem has a result
-          if (moveItem) {
-            // Remove the task from the todo array
-            employee.todo.id(moveItem._id).remove();
-
-            // Add task to done array
-            const item = {text: moveItem.text};
-            employee.done.push(item);
-
-            // Save document to DB
-            employee.save(function(err, employee) {
-              if (err) {
-                // Log and respond to DB errors
-                dev ? console.log(err) : '';
-                return next(err);
-              } else {
-                // Handle employee data being returned
-                dev ? console.log(employee) : '';
-                res.status(200).json(employee);
-              }
-            });
-          } else {
-            // Handle query with no employee data returned
-            dev ? console.log('Task Id could not be found. Task not moved') : '';
-            res.status(200).json('Task Id could not be found. Task not moved');
+        // Save employee with new todo/done arrays
+        employee.save(function (err, employee) {
+          if (err) { // Handle any DB errors
+            return next(err);
+          } else { // Return new employee data
+            res.status(200).json(employee);
           }
-        } else if (column === 'todo') {
-          // Get the task object from employee done array before removal
-          const moveItem = employee.done.find(item => item._id.toString() === taskId);
-
-          // Makesure moveItem has a result
-          if (moveItem) {
-            // Remove the task from the done array
-            employee.done.id(moveItem._id).remove();
-
-            // Add task to todo array
-            const item = { text: moveItem.text };
-            employee.todo.push(item);
-
-            // Save document to DB
-            employee.save(function (err, employee) {
-              if (err) {
-                // Log and respond to DB errors
-                dev ? console.log(err) : '';
-                return next(err);
-              } else {
-                // Handle employee data being returned
-                dev ? console.log(employee) : '';
-                res.status(200).json(employee);
-              }
-            });
-          } else {
-            // Handle query with no employee data returned
-            dev ? console.log('Task Id could not be found. Task not moved') : '';
-            res.status(200).json('Task Id could not be found. Task not moved');
-          }
-        }
-      } else {
-        // Handle no employee data returned
-        dev ? console.log('No employee with that ID. Task not saved.') : '';
-        res.status(200).json('No employee with that ID. Task not saved.');
+        });
+      } else { // Handle no employee data returned
+        res.status(404).json('No employee with that ID. Task not saved.');
       }
     }
   });
