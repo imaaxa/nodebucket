@@ -34,12 +34,8 @@ export class TaskService {
     private http: HttpClient
   ) {}
 
-  getTasks(list: string) {
-    /*if (list === 'todo') {
-      return [...this.todoTasks];
-    } else if (list === 'done') {
-      return [...this.doneTasks];
-    }//*/
+  // Get the todo/done task arrays
+  getTasks() {
     this.http.get<{ empId: string, todo: Task[], done: Task[] }>(this.apiUrl + this.empId + '/tasks', this.opts)
       .subscribe((tasksData) => {
         this.todoTasks = tasksData.todo;
@@ -49,6 +45,7 @@ export class TaskService {
       });
   }
 
+  // Update any listeners of a change of data
   getTaskUpdateListener(list: string) {
     if (list === 'todo') {
       return this.todoTasksUpdated.asObservable();
@@ -57,6 +54,7 @@ export class TaskService {
     }
   }
 
+  // Add a new task to the todo Database and update todo array
   addTask(_id: string, title: string, text: string) {
     const task: Task = { _id: _id, title: title, text: text };
     const postUrl = this.apiUrl + this.empId + '/tasks';
@@ -70,5 +68,21 @@ export class TaskService {
         this.todoTasks.push(task);
         this.todoTasksUpdated.next([...this.todoTasks]);
       });
+  }
+
+  // Delete a task from the Database and update the todo/done arrays
+  deleteTask(taskId: string) {
+    console.log(`${this.apiUrl}${this.empId}/tasks/${taskId}`);
+
+    this.http
+      .delete(
+        `${this.apiUrl}${this.empId}/tasks/${taskId}`,
+        this.opts
+      )
+      .subscribe(res => {
+        this.getTasks();
+      }, err => {
+        console.log(err);
+      })
   }
 }

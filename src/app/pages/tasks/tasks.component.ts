@@ -10,6 +10,7 @@ import { Component, OnInit, Inject, OnDestroy }  from '@angular/core';
 import { CookieService }              from 'ngx-cookie-service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { HttpClient, HttpHeaders }    from "@angular/common/http";
+import { MatDialog } from '@angular/material/dialog';
 import { Router }                     from "@angular/router";
 import { Subscription, from }         from "rxjs";
 
@@ -31,6 +32,7 @@ export class TasksComponent implements OnInit {
   constructor(
     public taskService: TaskService,
     private cookieService: CookieService,
+    public dialog: MatDialog,
     private http: HttpClient,
     private router: Router
   ) { }
@@ -38,33 +40,43 @@ export class TasksComponent implements OnInit {
   // Retreive tasks on load
   ngOnInit(): void {
     // Reteive tasks for service instance
-    this.taskService.getTasks('todo');
+    this.taskService.getTasks();
     this.taskService.getTaskUpdateListener('todo').subscribe((tasks: Task[]) => {
       this.todoTasks = tasks;
     });
 
-    this.taskService.getTasks('done');
+    this.taskService.getTasks();
     this.taskService.getTaskUpdateListener('done').subscribe((tasks: Task[]) => {
       this.doneTasks = tasks;
     });
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(EditTasksComponent, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
   // Edit/Create modal window
-  showDialog(_id: string): void {
-    console.log(_id);
+  openEditDialog(taskId): void {
+    const dialogRef = this.dialog.open(EditTasksComponent, {
+      data: {
+        taskId: taskId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
   // Delete task
-  onDelete(_id: string): void {
-    console.log(_id);
-  }
-
-  // Update the task arrays in DB
-  onPut(): void {
-  }
-
-  onTaskCreated(task) {
-    this.todoTasks.push(task);
+  onTaskDelete(taskId: string): void {
+    //console.log('Task removed: ' + taskId);
+    this.taskService.deleteTask(taskId);
   }
 
   // Drag&Drop
