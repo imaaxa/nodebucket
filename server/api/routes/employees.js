@@ -3,7 +3,7 @@ Title: Node Bucket
 Author: Cory Gilliam
 Date:  March 2020;
 Modified By:
-Description: Web 450 Capstone Project.
+Description: Employee API responce handlers.
 ===========================================*/
 /* jshint expr: true */
 // Requires
@@ -36,17 +36,14 @@ router.get('/', (req, res, next) => {
     .then(employee => {
       if (employee !== null) {
         // Handle employee data being returned
-        dev ? console.log(employee) : '';
         res.status(200).json(employee);
       } else {
         // Handle no employee data returned
-        dev ? console.log('No employees were found.') : '';
-        res.status(200).json('No employees were found.');
+        res.status(404).json('No employees were found.');
       }
     })
     .catch(err => {
       // Log and respond to DB errors
-      dev ? console.log(`Error: ${err}`) : '';
       res.status(500).json(err);
     });
 });
@@ -60,18 +57,14 @@ router.get('/:employeeId', (req, res, next) => {
   // Get one employee by _id and log results/errors
   Employee.findOne({empId: employeeId}, 'empId firstName lastName todo done', function(err, employee) {
     if (err) {
-      // Log and respond to DB errors
-      dev ? console.log(err) : '';
       res.status(500).json(err);
     } else {
       if (employee !== null) {
         // Handle employee data being returned
-        dev ? console.log(employee) : '';
         res.status(200).json(employee);
       } else {
         // Handle no employee data returned
-        dev ? console.log('No employee with that ID.') : '';
-        res.status(200).json('No employee with that ID.');
+        res.status(404).json('No employee with that ID.');
       }
     }
   });
@@ -95,17 +88,14 @@ router.post('/', checkAuth, (req, res, next) => {
   employee.save(function(err, employee) {
     if (err) {
       // Log and respond to DB errors
-      dev ? console.log(err) : '';
       res.status(500).json({ error: err});
     } else {
       if (employee !== null) {
         // Handle employee data being returned
-        dev ? console.log(employee) : '';
         res.status(200).json(employee);
       } else {
         // Log and respond to DB errors
-        dev ? console.log('No data was saved.') : '';
-        res.status(200).json('No data was saved.');
+        res.status(404).json('No data was saved.');
       }
     }
   });
@@ -143,7 +133,6 @@ router.patch('/:employeeId', checkAuth, (req, res, next) => {
     })
     .catch(err => {
       // Log and respond to DB errors
-      dev ? console.log(err) : '';
       res.status(500).json(err);
     });
 });
@@ -158,28 +147,22 @@ router.delete('/:employeeId', checkAuth, (req, res, next) => {
   Employee.findOne({empId: employeeId}, '_id', function(err, employee) {
     if (err) {
       // Log and respond to DB errors
-      dev ? console.log(err) : '';
       return next(err);
     } else {
       // Check if employee data was returned
       if (employee !== null) {
         // Handle employee data being returned
-
-        dev ? console.log(employee) : '';
         employee.remove(function (err, employee) {
           if (err) {
             // Log and respond to DB errors
-            dev ? console.log(err) : '';
             return next(err);
           } else {
             // Log and respond to success
-            dev ? console.log('Employee record has been deleted.') : '';
             res.status(200).json('Employee record has been deleted.');
           }
         });
       } else {
         // Handle no employee data returned
-        dev ? console.log('Employee could not be found. Employee not removed') : '';
         res.status(200).json('Employee could not be found. Employee not removed');
       }
     }
@@ -200,21 +183,17 @@ router.get('/login/:employeeId/', (req, res, next) => {
   Employee.findOne({empId: employeeId}, '_id', function(err, employee) {
     if (err) {
       // Log and respond to DB errors
-      dev ? console.log(err) : '';
       res.status(500).json(err);
     } else {
-      dev ? console.log(employee) : '';
       if (employee != null) {
         // Handle employee data being returned
-
         // Create jwt and return token
         let payload = {subject: employee._id};
         let token = jwt.sign(payload, options.storageConfig.env.JWT_KEY);
         res.status(200).json({token});
       } else {
         // Handle no employee data returned
-        dev ? console.log('There was no employee returned.') : '';
-        res.status(200).json('There was no employee returned.');
+        res.status(404).json('There was no employee returned.');
       }
     }
   });
@@ -233,17 +212,14 @@ router.get('/:employeeId/tasks', checkAuth, function (req, res, next) {
   Employee.findOne({empId: employeeId}, 'todo done', function(err, employee) {
     if (err) {
       // Log and respond to DB errors
-      dev ? console.log(err) : '';
       return next(err);
     } else {
       if (employee !== null) {
         // Handle employee data being returned
-        dev ? console.log(employee) : '';
         res.status(200).json(employee);
       } else {
         // Handle no employee data returned
-        dev ? console.log('No employee with that ID.') : '';
-        res.status(200).json('No employee with that ID.');
+        res.status(404).json('No employee with that ID.');
       }
     }
   });
@@ -254,34 +230,32 @@ router.get('/:employeeId/tasks', checkAuth, function (req, res, next) {
  */
 router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
-  console.log(req.body);
 
   Employee.findOne({empId: employeeId}, 'todo done', function(err, employee) {
     if (err) {
-      dev ? console.log(err) : '';
       return next(err);
     } else {
+      // Handle employee data being returned
       if (employee !== null) {
-        // Handle employee data being returned
-        dev ? console.log(employee) : '';
-        const item = {title: req.body.title, text: req.body.text};
+        // Build task object
+        const item = {
+          title: req.body.title,
+          text: req.body.text
+        };
 
+        // Add new task object to todo array
         employee.todo.push(item);
+        // Save array to DB and return 201 created response
         employee.save(function(err, employee) {
-
           if (err) {
-            dev ? console.log(err) : '';
             return next(err);
           } else {
-            dev ? console.log(employee) : '';
             res.status(201).json(employee);
           }
-
         });
       } else {
         // Handle no employee data returned
-        dev ? console.log('No employee with that ID. Task not saved.') : '';
-        res.status(200).json('No employee with that ID. Task not saved.');
+        res.status(404).json('No employee with that ID. Task not saved.');
       }
     }
   });
@@ -293,33 +267,30 @@ router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
 router.put('/:employeeId/tasks', checkAuth, function (req, res, next) {
   // Variable passed through request
   const employeeId = req.params.employeeId;
-  const todo = req.body.todo;
-  const done = req.body.done;
+  const newTodo = req.body.todo;
+  const newDone = req.body.done;
 
-  console.log('Todo: ' + todo);
-  console.log('Done: ' + done);
-  res.status(210);
   // Get employee data for the employeeId given
   Employee.findOne({empId: employeeId}, 'todo done', function (err, employee) {
-    if (err) { // Handle any DB errors
+    if (err) {
       return next(err);
-    } else { // Handle DB return data
-      if (employee !== null) { // Handle employee data returned
+    } else {
+      if (employee !== null) {
         // Replace current todo/done arrays with arrays sent in request
         employee.set({
-          todo: this.todo,
-          done: this.done
+          todo: newTodo,
+          done: newDone
         });
 
         // Save employee with new todo/done arrays
         employee.save(function (err, employee) {
-          if (err) { // Handle any DB errors
+          if (err) {
             return next(err);
-          } else { // Return new employee data
+          } else {
             res.status(200).json(employee);
           }
         });
-      } else { // Handle no employee data returned
+      } else {
         res.status(404).json('No employee with that ID. Task not saved.');
       }
     }
@@ -337,19 +308,15 @@ router.delete('/:employeeId/tasks/:taskId', checkAuth, function (req, res, next)
   Employee.findOne({empId: employeeId}, 'todo done', function (err, employee) {
     // Handle any DB errors
     if (err) {
-      dev ? console.log(err) : '';
       return next(err);
     } else {
-      // Handle query success
-
-      // Handle query with employee data returned
       if (employee !== null) {
-        // Handle employee data being returned
-        dev ? console.log(employee) : '';
-
-        // Try to find the task _id in the employee todo/done arrays
-        const todoItem = employee.todo.find( item => item._id.toString() === taskId);
-        const doneItem = employee.done.find( item => item._id.toString() === taskId);
+        const todoItem = employee.todo.find(
+          item => item._id.toString() === taskId
+        );
+        const doneItem = employee.done.find(
+          item => item._id.toString() === taskId
+        );
 
         // Remove task from the array that has it
         if (todoItem) {
@@ -357,36 +324,23 @@ router.delete('/:employeeId/tasks/:taskId', checkAuth, function (req, res, next)
           employee.todo.id(todoItem._id).remove();
           employee.save(function(err, employeeTodo) {
             if (err) {
-              // Log and respond to DB errors
-              dev ? console.log(err) : '';
               return next(err);
             } else {
-              // Handle employee data being returned
-              dev ? console.log(employeeTodo) : '';
               res.status(200).json(employeeTodo);
             }
           });
-
-          // Remove task from the array that has it
         } else if (doneItem) {
-            // Remove the task fro the done array
             employee.done.id(doneItem._id).remove();
             employee.save(function (err, employeeDone) {
               if (err) {
-                // Log and respond to DB errors
-                dev ? console.log(err) : '';
                 return next(err);
               } else {
-                // Handle employee data being returned
-                dev ? console.log(employeeDone) : '';
                 res.status(200).json(employeeDone);
               }
             });
           }
       } else {
-        // Handle no employee data returned
-        dev ? console.log('No employee with that ID. Task not deleted.') : '';
-        res.status(200).json('No employee with that ID. Task not deleted.');
+        res.status(404).json('No employee with that ID. Task not deleted.');
       }
     }
   });
