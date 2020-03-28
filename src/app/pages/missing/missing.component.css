@@ -1,0 +1,18 @@
+.file-not-found {
+  align-items: center !important;
+}
+
+.file-not-found__image {
+  max-width: 800px;
+}
+
+.file-not-found__title {
+  font-size: 1.5em;
+  line-height: 1.5em;
+}
+.file-not-found__header,
+.file-not-found__title,
+.file-not-found__h2 {
+  margin: 0 !important;
+  padding: 0;
+}
