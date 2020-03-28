@@ -1,21 +1,18 @@
 /*============================================;
 Title: Node Bucket
-Author: Cory Gilliam
+Author: Prof R. Krasso
 Date:  March 2020;
-Modified By:
+Modified By: Cory Gilliam
 Description: Task page.
 ===========================================*/
 
-import { Component, OnInit, Inject, OnDestroy }  from '@angular/core';
-import { CookieService }              from 'ngx-cookie-service';
+import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { HttpClient, HttpHeaders }    from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { MatDialog } from '@angular/material/dialog';
-import { Router }                     from "@angular/router";
-import { Subscription, from }         from "rxjs";
 
-import { TaskService }        from "../tasks.services";
-import { Task }               from "../task.model";
+import { Task } from "../task.model";
 import { EditTasksComponent } from '../edit-tasks/edit-tasks.component';
 
 @Component({
@@ -24,73 +21,128 @@ import { EditTasksComponent } from '../edit-tasks/edit-tasks.component';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-  private taskSub: Subscription;
+  // Guard data
+  private empId = this.cookieService.get('userID');
+  private apiUrl = 'http://localhost:3000/api/employees/';
+  private opts = {
+    headers: new HttpHeaders({
+      'Authorization': 'Bearer ' + this.cookieService.get('session_user')
+    })
+  };
 
-  todoTasks: Task[] = [];
-  doneTasks: Task[] = [];
+  private todoTasks: Task[] = [];
+  private doneTasks: Task[] = [];
 
   constructor(
-    public taskService: TaskService,
-    private cookieService: CookieService,
-    public dialog: MatDialog,
-    private http: HttpClient,
-    private router: Router
-  ) { }
-
-  // Retreive tasks on load
-  ngOnInit(): void {
-    // Reteive tasks for service instance
-    this.taskService.getTasks();
-    this.taskService.getTaskUpdateListener('todo').subscribe(tasks => {
-      this.todoTasks = tasks;
-    });
-
-    this.taskService.getTasks();
-    this.taskService.getTaskUpdateListener('done').subscribe(tasks => {
-      this.doneTasks = tasks;
-    });
+      private cookieService: CookieService,
+      private http: HttpClient,
+      private dialog: MatDialog
+    ) {
+    this.http.get<{ empId: string, todo: Task[], done: Task[] }>(this.apiUrl + this.empId + '/tasks', this.opts)
+      .subscribe(res => {
+        this.todoTasks = res.todo;
+        this.doneTasks = res.done;
+        console.log(res);
+      }, err => {
+        console.log(err);
+      });
   }
 
-  // Open the create ne task modal
-  openDialog(): void {
+  // Initial load
+  ngOnInit() {}
+
+  // Open the create new task modal
+  openDialog() {
+    const dialogRef = this.dialog.open(EditTasksComponent, {
+      disableClose: true
+    });
+
+    // Save the new task if form has data
+    dialogRef.afterClosed()
+      .subscribe(data => {
+        if (data) {
+          this.http.post<{ todo: Task[], done: Task[] }>(
+            this.apiUrl + this.empId + 'tasks',
+            { title: data.title, text: data.text},
+            this.opts
+          ).subscribe(employee => {
+            this.todoTasks = employee.todo;
+            this.doneTasks = employee.done;
+          }, err => {
+            console.log(err);
+
+          });
+        }
+      });
+  }
+
+  // Remove if not able to get working
+  // Edit/Create modal window
+  openEditDialog(taskId) {
     const dialogRef = this.dialog.open(EditTasksComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => {});
-  }
-
-  // Edit/Create modal window
-  openEditDialog(taskId): void {
-    const dialogRef = this.dialog.open(EditTasksComponent, {
-      data: {
-        taskId: taskId
-      }
-    });
-
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 
   // Delete task
-  onTaskDelete(taskId: string): void {
-    this.taskService.deleteTask(taskId);
+  onTaskDelete(taskId: string) {
+    if (taskId) {
+      console.log('Removing task: ' + taskId);
+      this.http.delete<{todo: Task[], done: Task[]}>(
+          this.apiUrl + this.empId + '/tasks/' + taskId,
+          this.opts
+        ).subscribe(res => {
+          this.todoTasks = res.todo;
+          this.doneTasks = res.done;
+        }, err => {
+          console.log(err);
+        });
+    }
   }
 
-  // Drag&Drop
+  // Drag and Drop
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
-      console.log('Column to sort order was done');
-      moveItemInArray( event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
 
-      // Update the Database with the change
-      //this.taskService.updateTasks(this.todoTasks, this.doneTasks);
+      this.updateTasks(this.todoTasks, this.doneTasks)
+        .subscribe(res => {
+          this.todoTasks = res.todo;
+          this.doneTasks = res.done;
+        }, err => {
+          console.log(`Error saving update tasks: ${err}`);
+        });
+      console.log('Moved task with in existing column');
     } else {
-      console.log('Column to column was done');
-      transferArrayItem( event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
 
-      // Update the Database with the change
-      //this.taskService.updateTasks(this.todoTasks, this.doneTasks);
-
+      this.updateTasks(this.todoTasks, this.doneTasks)
+        .subscribe(res => {
+          this.todoTasks = res.todo;
+          this.doneTasks = res.done;
+        }, err => {
+          console.log(`Error saving update tasks: ${err}`);
+        });
+      console.log('Moved tasks to a new column');
     }
+  }
+
+  // Update tasks
+  updateTasks(todo: Task[], done: Task[]) {
+    return this.http.put<{todo: Task[], done: Task[]}>(
+      this.apiUrl + this.empId + '/tasks',
+      {todo, done},
+      this.opts
+    );
   }
 }
