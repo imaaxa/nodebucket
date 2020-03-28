@@ -55,9 +55,7 @@ export class TasksComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(EditTasksComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    dialogRef.afterClosed().subscribe(result => {});
   }
 
   // Edit/Create modal window
@@ -81,16 +79,17 @@ export class TasksComponent implements OnInit {
   // Drag&Drop
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
+      console.log('Column to sort order was done');
       moveItemInArray( event.container.data, event.previousIndex, event.currentIndex);
 
       // Update the Database with the change
-      this.taskService.updateTasks(this.todoTasks, this.doneTasks);
-      console.log('Column to sort order was done');
+      //this.taskService.updateTasks(this.todoTasks, this.doneTasks);
     } else {
-      transferArrayItem( event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-      // Update the Database with the change
-      this.taskService.updateTasks(this.todoTasks, this.doneTasks);
       console.log('Column to column was done');
+      transferArrayItem( event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+
+      // Update the Database with the change
+      //this.taskService.updateTasks(this.todoTasks, this.doneTasks);
 
     }
   }

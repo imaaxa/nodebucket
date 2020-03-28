@@ -291,13 +291,14 @@ router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
  * Handles PUT request of tasks for employee
  */
 router.put('/:employeeId/tasks', checkAuth, function (req, res, next) {
+  // Variable passed through request
   const employeeId = req.params.employeeId;
   const todo = req.body.todo;
   const done = req.body.done;
 
-  console.log(todo);
-  console.log(done);
-
+  console.log('Todo: ' + todo);
+  console.log('Done: ' + done);
+  res.status(210);
   // Get employee data for the employeeId given
   Employee.findOne({empId: employeeId}, 'todo done', function (err, employee) {
     if (err) { // Handle any DB errors

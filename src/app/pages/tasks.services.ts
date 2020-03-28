@@ -74,8 +74,8 @@ export class TaskService {
 
     this.http.put( `${this.apiUrl}${this.empId}/tasks/`,
       {
-        todo: this.todoTasks,
-        done: this.doneTasks
+        todo: todoTasks,
+        done: doneTasks
       },
       this.opts
     ).subscribe(res => {},
@@ -86,11 +86,11 @@ export class TaskService {
 
   // Delete a task from the Database and update the todo/done arrays
   deleteTask(taskId: string) {
-    console.log(`${this.apiUrl}${this.empId}/tasks/${taskId}`);
+    console.log('Delete Task: ' + this.apiUrl + this.empId + '/tasks/' + taskId);
 
     this.http
       .delete(
-        `${this.apiUrl}${this.empId}/tasks/${taskId}`,
+        this.apiUrl + this.empId + '/tasks/' + taskId,
         this.opts
       )
       .subscribe(res => {
