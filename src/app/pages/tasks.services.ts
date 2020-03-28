@@ -53,8 +53,8 @@ export class TaskService {
   }
 
   // Add a new task to the todo Database and update todo array
-  addTask(_id: string, title: string, text: string) {
-    const task: Task = { _id: _id, title: title, text: text };
+  addTask(title: string, text: string) {
+    const task: Task = { title: title, text: text };
     const postUrl = this.apiUrl + this.empId + '/tasks';
 
     this.http
@@ -62,10 +62,26 @@ export class TaskService {
       .subscribe(responseDate => {
         console.log(responseDate.message);
 
-        const task: Task = { _id: null, title: title, text: text };
+        const task: Task = { title: title, text: text };
         this.todoTasks.push(task);
         this.todoTasksUpdated.next([...this.todoTasks]);
       });
+  }
+
+  // Update todo/done arrays in the Database upon changes
+  updateTasks(todoTasks: Task[], doneTasks: Task[]) {
+    console.log('Called the taskService updateTasks method.');
+
+    this.http.put( `${this.apiUrl}${this.empId}/tasks/`,
+      {
+        todo: this.todoTasks,
+        done: this.doneTasks
+      },
+      this.opts
+    ).subscribe(res => {},
+      err => {
+        console.log(err);
+    });
   }
 
   // Delete a task from the Database and update the todo/done arrays

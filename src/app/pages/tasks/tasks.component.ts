@@ -41,19 +41,19 @@ export class TasksComponent implements OnInit {
   ngOnInit(): void {
     // Reteive tasks for service instance
     this.taskService.getTasks();
-    this.taskService.getTaskUpdateListener('todo').subscribe((tasks: Task[]) => {
+    this.taskService.getTaskUpdateListener('todo').subscribe(tasks => {
       this.todoTasks = tasks;
     });
 
     this.taskService.getTasks();
-    this.taskService.getTaskUpdateListener('done').subscribe((tasks: Task[]) => {
+    this.taskService.getTaskUpdateListener('done').subscribe(tasks => {
       this.doneTasks = tasks;
     });
   }
 
+  // Open the create ne task modal
   openDialog(): void {
-    const dialogRef = this.dialog.open(EditTasksComponent, {
-    });
+    const dialogRef = this.dialog.open(EditTasksComponent, {});
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
@@ -75,24 +75,23 @@ export class TasksComponent implements OnInit {
 
   // Delete task
   onTaskDelete(taskId: string): void {
-    //console.log('Task removed: ' + taskId);
     this.taskService.deleteTask(taskId);
   }
 
   // Drag&Drop
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      moveItemInArray( event.container.data, event.previousIndex, event.currentIndex);
+
+      // Update the Database with the change
+      this.taskService.updateTasks(this.todoTasks, this.doneTasks);
+      console.log('Column to sort order was done');
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      transferArrayItem( event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      // Update the Database with the change
+      this.taskService.updateTasks(this.todoTasks, this.doneTasks);
+      console.log('Column to column was done');
+
     }
   }
-
 }

@@ -46,7 +46,7 @@ export class EditTasksComponent implements OnInit {
   // Create/Update task on Save button click
   onSave(form: NgForm) {
     // Send the form data to the task Service and reset form
-    this.taskService.addTask(null, form.value.titleValue, form.value.textValue);
+    this.taskService.addTask(form.value.titleValue, form.value.textValue);
 
     // Close dialog modal
     this.dialogRef.close();

@@ -288,12 +288,15 @@ router.post('/:employeeId/tasks', checkAuth, function (req, res, next) {
 });
 
 /**
- * Handles PUT request: Single tasks for employee
+ * Handles PUT request of tasks for employee
  */
 router.put('/:employeeId/tasks', checkAuth, function (req, res, next) {
   const employeeId = req.params.employeeId;
   const todo = req.body.todo;
   const done = req.body.done;
+
+  console.log(todo);
+  console.log(done);
 
   // Get employee data for the employeeId given
   Employee.findOne({empId: employeeId}, 'todo done', function (err, employee) {
