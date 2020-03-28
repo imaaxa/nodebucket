@@ -54,16 +54,19 @@ export class TasksComponent implements OnInit {
   // Open the create new task modal
   openDialog() {
     const dialogRef = this.dialog.open(EditTasksComponent, {
-      disableClose: true
+      disableClose: true,
+      autoFocus: true
     });
 
     // Save the new task if form has data
     dialogRef.afterClosed()
       .subscribe(data => {
+        console.log('Create task data: ' + data);
+
         if (data) {
           this.http.post<{ todo: Task[], done: Task[] }>(
-            this.apiUrl + this.empId + 'tasks',
-            { title: data.title, text: data.text},
+            this.apiUrl + this.empId + '/tasks',
+            { title: data.titleValue, text: data.textValue},
             this.opts
           ).subscribe(employee => {
             this.todoTasks = employee.todo;
