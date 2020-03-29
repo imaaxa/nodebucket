@@ -43,11 +43,8 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': true}));
 app.use(morgan('dev'));
-
-if (!options.storageConfig.serv.DEV) {
-  app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
-  app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
-}
+app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
+app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
 
 /**
  * Variables
