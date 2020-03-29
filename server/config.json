@@ -1,6 +1,6 @@
 {
   "serv": {
-    "DEV": true
+    "DEV": false
   },
   "env": {
     "MONGO_ATLAS_NAME":  "nodeBucketApp",
