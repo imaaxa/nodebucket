@@ -5,9 +5,8 @@ Date:  March 2020;
 Modified By:
 Description: Employee API responce handlers.
 ===========================================*/
-/* jshint expr: true */
+
 // Requires
-const options = require('../../options');
 const checkAuth = require('../../check-auth');
 const express = require('express');
 const router = express.Router();
@@ -19,7 +18,6 @@ const Employee = require('../models/employee');
 
 // Variables
 const employeeRoute = '/api/employees/';
-const dev = options.storageConfig.serv.DEV;
 
 /**************************************************
  * Employee Requests
