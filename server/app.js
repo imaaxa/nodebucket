@@ -53,13 +53,8 @@ if (!options.storageConfig.serv.DEV) {
  * Variables
  */
 const port = 3000; // server port
-const dbURI = "mongodb+srv://" +
-  options.storageConfig.env.MONGO_ATLAS_NAME +
-  ":" +
-  options.storageConfig.env.MONGO_ATLAS_PW +
-  "@buwebdev-cluster-1-3umfh.mongodb.net/" +
-  options.storageConfig.env.MONGO_ATLAS_TABLE +
-  "?retryWrites=true&w=majority";// Database connection string
+// Database connection string
+const dbURI = "mongodb+srv://nodeBucketApp:Zzxcvbnm@buwebdev-cluster-1-3umfh.mongodb.net/nodebucket?retryWrites=true&w=majority";
 
 /**
  * Database connection
