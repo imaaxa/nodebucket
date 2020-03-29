@@ -17,9 +17,6 @@ const path        = require('path');
 const mongoose    = require('mongoose');
 const jwt         = require('jsonwebtoken');
 
-// Require configuration variables
-const options = require('./options');
-
 /**
  * App configurations
  */
@@ -43,14 +40,10 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': true}));
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
-app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
+//app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
+//app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
 
-/**
- * Variables
- */
-const port = 3000; // server port
-// Database connection string
+const port = 3000;
 const dbURI = "mongodb+srv://nodeBucketApp:Zzxcvbnm@buwebdev-cluster-1-3umfh.mongodb.net/nodebucket?retryWrites=true&w=majority";
 
 /**
@@ -64,7 +57,7 @@ mongoose.connect(dbURI, {
     console.debug(`Connection to the database instance was successful`);
   }).catch(err => {
     console.log(`MongoDB FN Error: ${err.message}`);
-}); // end mongoose connection
+});
 
 /**
  * API(s)
