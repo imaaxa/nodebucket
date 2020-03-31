@@ -25,7 +25,7 @@ const mongoose    = require('mongoose');
 let app = express();
 
 // Set header parameters (C.O.R.S. error handling)
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
