@@ -15,10 +15,9 @@ const morgan      = require('morgan');
 const bodyParser  = require('body-parser');
 const path        = require('path');
 const mongoose    = require('mongoose');
-const jwt         = require('jsonwebtoken');
 
 // Require configuration variables
-const options = require('./options');
+//const options = require('./options');
 
 /**
  * App configurations
@@ -43,11 +42,8 @@ let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': true}));
 app.use(morgan('dev'));
-
-if (!options.storageConfig.serv.DEV) {
-  app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
-  app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
-}
+app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
+app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
 
 /**
  * Variables

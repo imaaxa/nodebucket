@@ -86,9 +86,7 @@
               "src/assets"
             ],
             "styles": [
-              {
-                "input": "./src/amat-theme.scss"
-              },
+              "./src/amat-theme.scss",
               "src/styles.css"
             ],
             "scripts": []
