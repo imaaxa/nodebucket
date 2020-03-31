@@ -19,7 +19,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   styleUrls: ['./auth-layout.component.css']
 })
 export class AuthLayoutComponent implements OnInit {
-  private _loginUrl = 'http://localhost:3000/api/employees/login/';
+  private _loginUrl = '/api/employees/login/';
   form: FormGroup;
 
   constructor(

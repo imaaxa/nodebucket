@@ -23,7 +23,7 @@ import { EditTasksComponent } from '../edit-tasks/edit-tasks.component';
 export class TasksComponent implements OnInit {
   // Guard data
   private empId = this.cookieService.get('userID');
-  private apiUrl = 'http://localhost:3000/api/employees/';
+  private apiUrl = '/api/employees/';
   private opts = {
     headers: new HttpHeaders({
       'Authorization': 'Bearer ' + this.cookieService.get('session_user')
