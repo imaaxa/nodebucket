@@ -1,0 +1,11 @@
+{
+  "serv": {
+    "DEV": true
+  },
+  "env": {
+    "MONGO_ATLAS_NAME":  "nodeBucketApp",
+    "MONGO_ATLAS_PW":    "Zzxcvbnm",
+    "MONGO_ATLAS_TABLE": "nodebucket",
+    "JWT_KEY": "Kg74#mh7cCn871nxc8h4"
+  }
+}
