@@ -52,7 +52,7 @@ if (!options.storageConfig.serv.DEV) {
 /**
  * Variables
  */
-const port = 3000; // server port
+const port = process.env.PORT || '3000';
 const dbURI = "mongodb+srv://" +
   options.storageConfig.env.MONGO_ATLAS_NAME +
   ":" +
@@ -102,5 +102,5 @@ app.use((error, req, res, next) => {
  * Create and start server
  */
 http.createServer(app).listen(port, function() {
-  console.log(`Application started and listening on port: ${port}`);
+  console.log('Application started and listening on port: ' + port);
 }); // end http create server function
