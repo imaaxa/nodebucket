@@ -26,7 +26,7 @@ const options = require('./options');
 let app = express();
 
 // Set header parameters (C.O.R.S. error handling)
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
     "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
-});
+});//*/
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': true}));
