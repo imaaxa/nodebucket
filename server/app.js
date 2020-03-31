@@ -40,21 +40,12 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': true}));
 app.use(morgan('dev'));
-<<<<<<< HEAD
-//app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
-//app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
-
-const port = 3000;
-=======
 app.use(express.static(path.join(__dirname, '../dist/nodebucket')));
 app.use('/', express.static(path.join(__dirname, '../dist/nodebucket')));
 
-/**
- * Variables
- */
-const port = 3000; // server port
+const port = 3000;
+
 // Database connection string
->>>>>>> 63f55e10e5be2da3a84da599c7bac0e1e18d67c6
 const dbURI = "mongodb+srv://nodeBucketApp:Zzxcvbnm@buwebdev-cluster-1-3umfh.mongodb.net/nodebucket?retryWrites=true&w=majority";
 
 /**
