@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, options.storageConfig.env.JWT_KEY);
+    const decoded = jwt.verify(token, 'Kg74#mh7cCn871nxc8h4');
     req.userData = decoded;
   } catch (err) {
     return res.status(401).json('Auth failed');
